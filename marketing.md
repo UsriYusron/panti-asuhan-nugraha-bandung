@@ -1,7 +1,7 @@
-# GiGi Energy Drink - Gen Z Landing Page
+# Panti Asuhan Nugraha Energy Drink - Gen Z Landing Page
 
 ## Title
-**GiGi Energy - Modern Gen Z Energy Drink Landing Page with Lenis Smooth Scroll & Framer Motion**
+**Panti Asuhan Nugraha Energy - Modern Gen Z Energy Drink Landing Page with Lenis Smooth Scroll & Framer Motion**
 
 ## Description
 A bold, premium energy drink landing page designed for the Gen Z audience. Features a striking dark theme with electric lime accents, ultra-smooth Lenis scrolling, and sophisticated Framer Motion micro-animations throughout.

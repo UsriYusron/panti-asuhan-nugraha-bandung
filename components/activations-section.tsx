@@ -8,7 +8,7 @@ const activations = [
   {
     icon: Sparkles,
     title: "Free Tasting Events",
-    description: "Experience GiGi at exclusive tasting events near you.",
+    description: "Experience Panti Asuhan Nugraha at exclusive tasting events near you.",
     cta: "Find Events",
   },
   {
@@ -26,7 +26,7 @@ const activations = [
   {
     icon: Calendar,
     title: "Event Organizers",
-    description: "Sponsor your next event with GiGi energy.",
+    description: "Sponsor your next event with Panti Asuhan Nugraha energy.",
     cta: "Sponsor Event",
   },
 ]
@@ -106,7 +106,7 @@ export function ActivationsSection() {
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            From tasting events to corporate partnerships, bring GiGi into your world.
+            From tasting events to corporate partnerships, bring Panti Asuhan Nugraha into your world.
           </motion.p>
         </motion.div>
 

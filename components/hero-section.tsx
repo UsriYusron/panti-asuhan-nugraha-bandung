@@ -100,7 +100,7 @@ export function HeroSection() {
                 animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
                 transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
               />
-              BETTER-FOR-YOU ENERGY DRINK
+              Panti Sosial Asuhan Anak Nugraha
             </motion.div>
 
             <div className="space-y-1 overflow-hidden">
@@ -115,7 +115,7 @@ export function HeroSection() {
                   custom={1}
                   className="inline-block"
                 >
-                  FUEL YOUR
+                  Membina
                 </motion.span>
               </motion.h1>
               <motion.h1
@@ -129,7 +129,7 @@ export function HeroSection() {
                   custom={2}
                   className="inline-block text-[#AFFF00]"
                 >
-                  AMBITION
+                  Masa Depan
                 </motion.span>
               </motion.h1>
               <motion.p
@@ -139,7 +139,7 @@ export function HeroSection() {
                 custom={3}
                 className="text-lg md:text-xl font-mono text-[#121212]/60 tracking-tight pt-2 max-w-md"
               >
-                Zero sugar. Natural flavors. Clean energy that hits different.
+                Membina dan Membangun Kepribadian Anak Asuh Yang Berakhlakul Karimah dan Mandiri.
               </motion.p>
             </div>
 
@@ -161,7 +161,7 @@ export function HeroSection() {
                   whileHover={{ x: "200%" }}
                   transition={{ duration: 0.6 }}
                 />
-                <span className="relative z-10">Sign Up & Save 25%</span>
+                <span className="relative z-10">Hubungi Kami</span>
                 <motion.svg
                   className="w-4 h-4 relative z-10"
                   fill="none"
@@ -174,35 +174,6 @@ export function HeroSection() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </motion.svg>
               </motion.button>
-              <motion.button
-                className="border-2 border-[#121212] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide relative overflow-hidden"
-                whileHover={{ scale: 1.02, backgroundColor: "#121212", color: "#fff" }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              >
-                Explore Flavours
-              </motion.button>
-            </motion.div>
-
-            <motion.div
-              variants={fadeUpVariants}
-              initial="hidden"
-              animate="visible"
-              custom={5}
-              className="flex flex-wrap gap-4 pt-2"
-            >
-              {["Zero Sugar", "75mg Caffeine", "Natural Flavours", "Vitamin B Rich"].map((benefit, i) => (
-                <motion.div
-                  key={benefit}
-                  className="flex items-center gap-2 text-xs font-mono text-[#121212]/60"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.8 + i * 0.1 }}
-                >
-                  <div className="w-1.5 h-1.5 bg-[#AFFF00] rounded-full" />
-                  {benefit}
-                </motion.div>
-              ))}
             </motion.div>
           </motion.div>
 
@@ -217,26 +188,22 @@ export function HeroSection() {
                 transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
               />
 
-              <motion.div
-                animate={{
-                  y: [0, -15, 0],
-                  rotate: [0, 2, 0],
-                }}
-                transition={{
-                  duration: 6,
-                  repeat: Number.POSITIVE_INFINITY,
-                  ease: "easeInOut",
-                }}
-              >
+              <div className="relative">
+                {/* Blur Putih Kiri */}
+                {/* <div className="absolute inset-y-0 -left-10 w-1/3 bg-gradient-to-r from-white via-white/50 to-transparent z-20 pointer-events-none blur-xl" /> */}
+
+                {/* Blur Putih Kanan */}
+                {/* <div className="absolute inset-y-0 -right-10 w-1/3 bg-gradient-to-l from-white via-white/50 to-transparent z-20 pointer-events-none blur-xl" /> */}
+
                 <Image
-                  src="/images/rm-bg.png"
-                  alt="GiGi Energy Drink - Lemon Lime Flavour"
-                  width={550}
-                  height={1025}
+                  src="/images/muhamadusriyusron.png"
+                  alt="Panti Asuhan Nugraha Energy Drink - Lemon Lime Flavour"
+                  width={1200}
+                  height={1200}
                   className="relative z-10 drop-shadow-2xl"
                   priority
                 />
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </div>

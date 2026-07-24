@@ -10,31 +10,30 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 const flavors = [
   {
     id: 1,
-    name: "Lemon Lime",
-    tagline: "Citrus Shock",
-    description: "A zesty explosion of natural lemon and lime that wakes you up instantly.",
-    image: "/images/drink2.png",
+    name: "Selamat Atas Kelulusan",
+    tagline: "Prestasi",
+    description: "Keterima sebagai mahasiswa UIN Sunan Gunung Djati Bandung Jalur PTKIN 2026.",
+    image: "/images/gng jati.jpg",
     bgColor: "from-[#84cc16]/20 via-[#84cc16]/10 to-transparent",
     accentColor: "#84cc16",
   },
   {
     id: 2,
-    name: "Pineapple Coconut",
-    tagline: "Tropical Rush",
-    description: "Island vibes with every sip. Transport yourself to paradise.",
-    image: "/images/drink1.png",
+    name: "Nobar Persib",
+    tagline: "Kegiatan",
+    description: "Nonton bareng Persib vs Madura United bersama komunitas @vikingmovement dan @officialvpc.",
+    image: "/images/persib.jpg",
     bgColor: "from-[#f59e0b]/20 via-[#f59e0b]/10 to-transparent",
     accentColor: "#f59e0b",
   },
   {
     id: 3,
-    name: "Mystery",
-    tagline: "Coming Soon",
-    description: "Something epic is brewing... Stay tuned.",
-    image: "/mystery-energy-drink-can-silhouette.jpg",
+    name: "Kunjungan Donatur",
+    tagline: "Kegiatan",
+    description: "Bersama kakak-kakak dari Universitas Pendidikan Indonesia dalam acara worksop kewirausahaan .",
+    image: "/images/upi.jpg",
     bgColor: "from-[#AFFF00]/20 via-[#AFFF00]/5 to-transparent",
     accentColor: "#AFFF00",
-    mystery: true,
   },
 ]
 
@@ -126,7 +125,6 @@ export function FlavorCarousel() {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            OUR FLAVOURS
           </motion.span>
           <h2 className="text-3xl md:text-5xl font-black text-[#121212] tracking-tighter mt-2 overflow-hidden">
             <motion.span
@@ -243,24 +241,6 @@ export function FlavorCarousel() {
                       </motion.p>
 
                       {!currentFlavor.mystery && (
-                        <motion.div
-                          className="flex flex-wrap gap-2"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.5 }}
-                        >
-                          {["Zero Sugar", "Metabolism Boost", "Natural Flavours", "Vitamin Rich"].map((badge) => (
-                            <span
-                              key={badge}
-                              className="px-2 py-1 bg-[#121212]/5 rounded-full text-xs font-mono text-[#121212]/60"
-                            >
-                              {badge}
-                            </span>
-                          ))}
-                        </motion.div>
-                      )}
-
-                      {!currentFlavor.mystery && (
                         <motion.button
                           className="px-6 py-3 rounded-full font-bold text-sm tracking-wide w-full md:w-auto relative overflow-hidden"
                           whileHover={{ scale: 1.02 }}
@@ -276,7 +256,7 @@ export function FlavorCarousel() {
                             whileHover={{ x: "100%" }}
                             transition={{ duration: 0.5 }}
                           />
-                          <span className="relative z-10">Add to Cart</span>
+                          <span className="relative z-10">Open on Instagram</span>
                         </motion.button>
                       )}
 

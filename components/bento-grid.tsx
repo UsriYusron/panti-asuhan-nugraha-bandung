@@ -2,37 +2,37 @@
 
 import type React from "react"
 
-import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
+import { motion, useInView, useMotionValue, useSpring, useTransform, animate } from "framer-motion"
+import { useRef, useState, useEffect } from "react"
 import { Zap, Flame, Brain, Sparkles } from "lucide-react"
 
 const features = [
   {
     icon: Zap,
-    title: "75mg",
-    subtitle: "Natural Caffeine",
-    description: "Clean energy without the crash",
+    title: "50",
+    subtitle: "Total Anak Asuh",
+    description: "Jumlah anak asuh dalam LKSA saat ini ",
     accent: "#AFFF00",
   },
   {
     icon: Flame,
-    title: "Zero",
-    subtitle: "Sugar Added",
-    description: "All the taste, none of the guilt",
+    title: "65",
+    subtitle: "Total Anak Dampingan",
+    description: "Jumlah anak asuh yang tidak tinggal di asrama",
     accent: "#FF6B35",
   },
   {
     icon: Brain,
-    title: "100%",
-    subtitle: "Mental Clarity",
-    description: "Enhanced focus & concentration",
+    title: "6",
+    subtitle: "Staff Pengasuh",
+    description: "Jumlah pengasuh yang bertugas menjaga anak asuh",
     accent: "#00D4FF",
   },
   {
     icon: Sparkles,
-    title: "B12",
-    subtitle: "Vitamin Complex",
-    description: "Essential nutrients for energy",
+    title: "15",
+    subtitle: "Staff Pengurus",
+    description: "Jumlah pengurus LKSA",
     accent: "#AFFF00",
   },
 ]
@@ -40,6 +40,22 @@ const features = [
 function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const [isHovered, setIsHovered] = useState(false)
+  const [count, setCount] = useState(1)
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
+
+  useEffect(() => {
+    const target = parseInt(feature.title, 10)
+    if (isInView && !isNaN(target)) {
+      const controls = animate(1, target, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate(value) {
+          setCount(Math.floor(value))
+        }
+      })
+      return controls.stop
+    }
+  }, [isInView, feature.title])
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -98,11 +114,11 @@ function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index:
           animate={
             isHovered
               ? {
-                  background: [
-                    "linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.03) 25%, transparent 30%)",
-                    "linear-gradient(105deg, transparent 70%, rgba(255,255,255,0.03) 75%, transparent 80%)",
-                  ],
-                }
+                background: [
+                  "linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.03) 25%, transparent 30%)",
+                  "linear-gradient(105deg, transparent 70%, rgba(255,255,255,0.03) 75%, transparent 80%)",
+                ],
+              }
               : {}
           }
           transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
@@ -136,7 +152,7 @@ function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index:
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 + index * 0.1 }}
             >
-              <span style={{ color: feature.accent }}>{feature.title}</span>
+              <span style={{ color: feature.accent }}>{isNaN(parseInt(feature.title)) ? feature.title : count}</span>
             </motion.div>
             <h3 className="text-sm font-semibold text-white mt-1">{feature.subtitle}</h3>
             <p className="text-xs text-white/50 mt-1 font-mono">{feature.description}</p>
@@ -178,7 +194,7 @@ export function BentoGrid() {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
             transition={{ delay: 0.1 }}
           >
-            What's Inside
+            Data dalam angka
           </motion.span>
 
           <div className="overflow-hidden mt-2">
@@ -188,7 +204,7 @@ export function BentoGrid() {
               animate={isInView ? { y: 0 } : { y: 60 }}
               transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.15 }}
             >
-              Formula & Benefits
+              Total Pelayanan
             </motion.h2>
           </div>
 

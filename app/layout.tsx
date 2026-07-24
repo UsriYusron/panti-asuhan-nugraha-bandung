@@ -17,10 +17,10 @@ const _jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "GiGi Energy Drink | Dream Big, Drink GiGi",
-  description: "Zero sugar, 75mg caffeine, 100% natural flavors. The energy drink for dreamers and doers.",
-  keywords: ["energy drink", "zero sugar", "natural energy", "GiGi", "caffeine"],
-    generator: 'v0.app'
+  title: "Panti Asuhan Nugraha | Membina dan Membangun Kepribadian Anak Asuh Yang Berakhlakul Karimah dan Mandiri",
+  description: "Dikembangkan oleh Muhamad Usri Yusron https://muhamad-usriyusron.site/ untuk Panti Asuhan Nugraha.",
+  keywords: ["muhamad usri yusron", "usri yusron", "panti nugraha", "Panti Asuhan Nugraha", "psaa nugraha bandung"],
+  generator: 'v0.app'
 }
 
 export const viewport: Viewport = {
