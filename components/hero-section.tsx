@@ -41,20 +41,13 @@ export function HeroSection() {
     offset: ["start start", "end start"],
   })
 
-  const rawY = useTransform(scrollYProgress, [0, 1], [0, 200])
-  const y = useSpring(rawY, springConfig)
+  const smoothScroll = useSpring(scrollYProgress, springConfig)
 
-  const rawTextX1 = useTransform(scrollYProgress, [0, 1], [0, -100])
-  const textX1 = useSpring(rawTextX1, springConfig)
-
-  const rawTextX2 = useTransform(scrollYProgress, [0, 1], [0, 100])
-  const textX2 = useSpring(rawTextX2, springConfig)
-
-  const rawScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9])
-  const scale = useSpring(rawScale, springConfig)
-
-  const rawOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
-  const opacity = useSpring(rawOpacity, springConfig)
+  const y = useTransform(smoothScroll, [0, 1], [0, 200])
+  const textX1 = useTransform(smoothScroll, [0, 1], [0, -100])
+  const textX2 = useTransform(smoothScroll, [0, 1], [0, 100])
+  const scale = useTransform(smoothScroll, [0, 0.5], [1, 0.9])
+  const opacity = useTransform(smoothScroll, [0, 0.8], [1, 0])
 
   return (
     <section
@@ -65,24 +58,8 @@ export function HeroSection() {
       {/* Subtle gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-white via-[#AFFF00]/5 to-white" />
 
-      <motion.div
-        className="absolute top-20 left-10 w-24 h-24 rounded-full bg-[#AFFF00]/20 blur-3xl"
-        animate={{
-          x: [0, 30, 0],
-          y: [0, -20, 0],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-40 right-20 w-32 h-32 rounded-full bg-[#AFFF00]/10 blur-3xl"
-        animate={{
-          x: [0, -40, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
+      <div className="absolute top-20 left-10 w-24 h-24 rounded-full bg-[#AFFF00]/20 blur-3xl" />
+      <div className="absolute bottom-40 right-20 w-32 h-32 rounded-full bg-[#AFFF00]/10 blur-3xl" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-12">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
@@ -179,14 +156,7 @@ export function HeroSection() {
 
           <motion.div style={{ y, scale }} className="relative flex justify-center">
             <motion.div variants={scaleInVariants} initial="hidden" animate="visible" className="relative">
-              <motion.div
-                className="absolute inset-0 bg-[#84cc16]/30 blur-[80px] rounded-full scale-75"
-                animate={{
-                  scale: [0.75, 0.85, 0.75],
-                  opacity: [0.3, 0.5, 0.3],
-                }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-              />
+              <div className="absolute inset-0 bg-[#84cc16]/30 blur-[80px] rounded-full scale-75 opacity-40" />
 
               <div className="relative">
                 {/* Blur Putih Kiri */}
