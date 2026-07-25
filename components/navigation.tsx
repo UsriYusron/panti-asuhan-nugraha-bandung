@@ -195,7 +195,7 @@ export function Navigation() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                Get 25% Off
+                Login
               </motion.button>
             </div>
           </motion.div>
