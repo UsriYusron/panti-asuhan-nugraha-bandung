@@ -42,15 +42,11 @@ export function Footer() {
 
   const footerLinks = [
     {
-      title: "Products",
-      links: ["Lemon Lime", "Pineapple Coconut", "Mystery", "Bundles"],
+      title: "Program",
+      links: ["Perlindungan & Pelayanan", "Training", "Layanan Informasi", "Kajian & Penelitian"],
     },
     {
-      title: "Quick Links",
-      links: ["Home", "Flavours", "Creators", "Distributors"],
-    },
-    {
-      title: "Company",
+      title: "Yayasan",
       links: ["About", "Careers", "Press", "Contact"],
     },
     {
@@ -77,7 +73,6 @@ export function Footer() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
             >
-              READY TO
             </motion.span>
             <motion.span
               className="block text-[#AFFF00]"
@@ -131,19 +126,10 @@ export function Footer() {
                 animate={isSubmitting ? { opacity: [1, 0.5, 1] } : {}}
                 transition={{ duration: 0.5, repeat: isSubmitting ? Number.POSITIVE_INFINITY : 0 }}
               >
-                {isSubmitting ? "Joining..." : "Get 25% Off"}
+                {isSubmitting ? "Joining..." : "Get News Latter"}
               </motion.span>
             </motion.button>
           </div>
-          <motion.p
-            className="text-white/40 font-mono text-xs mt-2 text-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-          >
-            Join 50k+ dreamers. No spam, just energy.
-          </motion.p>
         </motion.div>
 
         <motion.div
@@ -154,8 +140,7 @@ export function Footer() {
           transition={{ delay: 0.3 }}
         >
           <p className="text-white/60 font-mono text-xs max-w-xl mx-auto leading-relaxed">
-            Panti Asuhan Nugraha Energy is a better-for-you energy drink crafted with natural flavors, zero sugar, and a clean energy
-            formula. Fuel your ambition without the crash.
+            Panti Asuhan Nugraha tercatat dan terdaftar secara resmi sebagai yayasan dengan pengukuhan dari KemenKumHam  Nomor AHU-0006100.AH.01.12. Tahun 2020 Tanggal 10 Maret  2020.
           </p>
         </motion.div>
 
@@ -193,18 +178,8 @@ export function Footer() {
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
         >
-          <motion.div
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          >
-            <span className="text-xl font-black">
-              <span className="text-white">Gi</span>
-              <span className="text-[#AFFF00]">Gi</span>
-            </span>
-          </motion.div>
 
-          <p className="text-white/40 font-mono text-xs">© 2026 Panti Asuhan Nugraha Energy. All rights reserved.</p>
+          <p className="text-white/40 font-mono text-xs">© 2026 Panti Asuhan Nugraha. All rights reserved.</p>
 
           <motion.p
             className="text-white/30 font-mono text-xs cursor-pointer"
@@ -225,7 +200,9 @@ export function Footer() {
             }
             transition={{ duration: 0.5 }}
           >
-            made with energy
+            <a href="https://muhamad-usriyusron.site/" target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+              made with MUY ♥
+            </a>
           </motion.p>
         </motion.div>
       </div>
@@ -239,6 +216,6 @@ export function Footer() {
       >
         Panti Asuhan Nugraha
       </motion.div>
-    </footer>
+    </footer >
   )
 }

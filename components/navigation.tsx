@@ -61,11 +61,11 @@ export function Navigation() {
   }
 
   const navLinks = [
-    { label: "Profile", href: "#hero" },
-    { label: "Data Anak", href: "#flavours" },
-    { label: "Laporan", href: "#creators" },
-    { label: "Program Kegiatan", href: "#distributors" },
-    { label: "Careers", href: "#careers" },
+    { label: "Profile", href: "" },
+    { label: "Data Anak", href: "" },
+    { label: "Laporan", href: "" },
+    { label: "Program Kegiatan", href: "" },
+    { label: "Careers", href: "" },
   ]
 
   return (
@@ -133,7 +133,7 @@ export function Navigation() {
             animate={{ x: ["-100%", "200%"] }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
           />
-          <span className="relative z-10">Get 25% Off</span>
+          <span className="relative z-10">Login</span>
         </motion.button>
 
         <motion.button

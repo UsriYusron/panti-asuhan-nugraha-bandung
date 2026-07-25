@@ -4,36 +4,57 @@ import type React from "react"
 
 import { motion, useInView, useMotionValue, useSpring, useTransform, animate } from "framer-motion"
 import { useRef, useState, useEffect } from "react"
-import { Zap, Flame, Brain, Sparkles } from "lucide-react"
+import { Baby, Users, UserCheck, Briefcase, Map, Building, School } from "lucide-react"
 
 const features = [
   {
-    icon: Zap,
+    icon: Baby,
     title: "50",
     subtitle: "Total Anak Asuh",
     description: "Jumlah anak asuh dalam LKSA saat ini ",
     accent: "#AFFF00",
   },
   {
-    icon: Flame,
+    icon: Users,
     title: "65",
     subtitle: "Total Anak Dampingan",
     description: "Jumlah anak asuh yang tidak tinggal di asrama",
     accent: "#FF6B35",
   },
   {
-    icon: Brain,
+    icon: UserCheck,
     title: "6",
     subtitle: "Staff Pengasuh",
     description: "Jumlah pengasuh yang bertugas menjaga anak asuh",
     accent: "#00D4FF",
   },
   {
-    icon: Sparkles,
+    icon: Briefcase,
     title: "15",
     subtitle: "Staff Pengurus",
     description: "Jumlah pengurus LKSA",
     accent: "#AFFF00",
+  },
+  {
+    icon: Map,
+    title: "2,492 m2",
+    subtitle: "Luas Tanah",
+    description: "Total Luas tanah",
+    accent: "#ea00ffff",
+  },
+  {
+    icon: Building,
+    title: "600 m2",
+    subtitle: "Gedung Panti",
+    description: "Luas tanah gedung panti",
+    accent: "#00ff80ff",
+  },
+  {
+    icon: School,
+    title: "1800 m2",
+    subtitle: "Gedung Sekolah",
+    description: "Luas tanah gedung sekolah",
+    accent: "#ff8800ff",
   },
 ]
 
@@ -43,8 +64,12 @@ function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index:
   const [count, setCount] = useState(1)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
 
+  const match = feature.title.match(/^([\d,.]+)(.*)$/)
+  const target = match ? parseFloat(match[1].replace(/,/g, "")) : NaN
+  const rawSuffix = match ? match[2] : ""
+  const suffix = rawSuffix.replace("m2", "m²")
+
   useEffect(() => {
-    const target = parseInt(feature.title, 10)
     if (isInView && !isNaN(target)) {
       const controls = animate(1, target, {
         duration: 2,
@@ -55,7 +80,7 @@ function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index:
       })
       return controls.stop
     }
-  }, [isInView, feature.title])
+  }, [isInView, target])
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -152,7 +177,7 @@ function FeatureCard({ feature, index }: { feature: (typeof features)[0]; index:
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.2 + index * 0.1 }}
             >
-              <span style={{ color: feature.accent }}>{isNaN(parseInt(feature.title)) ? feature.title : count}</span>
+              <span style={{ color: feature.accent }}>{isNaN(target) ? feature.title : count.toLocaleString("id-ID") + suffix}</span>
             </motion.div>
             <h3 className="text-sm font-semibold text-white mt-1">{feature.subtitle}</h3>
             <p className="text-xs text-white/50 mt-1 font-mono">{feature.description}</p>

@@ -2,32 +2,32 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { Sparkles, Dumbbell, Building2, Calendar } from "lucide-react"
+import { HeartHandshake, BookOpen, Info, FlaskConical } from "lucide-react"
 
 const activations = [
   {
-    icon: Sparkles,
-    title: "Free Tasting Events",
-    description: "Experience Panti Asuhan Nugraha at exclusive tasting events near you.",
-    cta: "Find Events",
+    icon: HeartHandshake,
+    title: "Perlindungan dan Pelayanan Kesejahteraan",
+    description: "Memberikan fasilitas, pemenuhan kebutuhan pokok, jaminan kesehatan, serta pendampingan psikososial untuk memastikan setiap anak asuh mendapatkan perlindungan dan kesejahteraan yang optimal.",
+    cta: "Pelajari lebih lanjut",
   },
   {
-    icon: Dumbbell,
-    title: "Gyms & Studios",
-    description: "Partner with us to fuel your fitness community.",
-    cta: "Partner With Us",
+    icon: BookOpen,
+    title: "Training",
+    description: "Menyelenggarakan berbagai pelatihan keterampilan vokasional, pembinaan karakter, serta pengembangan bakat untuk membekali anak asuh dengan keahlian praktis dan kemandirian.",
+    cta: "Pelajari lebih lanjut",
   },
   {
-    icon: Building2,
-    title: "Corporate Offices",
-    description: "Power up your workplace. Bulk orders available.",
-    cta: "Get Quote",
+    icon: Info,
+    title: "Layanan Informasi",
+    description: "Menyediakan layanan informasi yang transparan bagi donatur dan masyarakat, mencakup pelaporan perkembangan anak, program kegiatan panti, serta penyaluran dana bantuan.",
+    cta: "Pelajari lebih lanjut",
   },
   {
-    icon: Calendar,
-    title: "Event Organizers",
-    description: "Sponsor your next event with Panti Asuhan Nugraha energy.",
-    cta: "Sponsor Event",
+    icon: FlaskConical,
+    title: "Kajian, Penelitian dan Pengembangan Model",
+    description: "Melakukan riset dan evaluasi terkait metode pengasuhan anak secara berkesinambungan untuk terus mengembangkan model pembinaan terbaik yang adaptif di masa mendatang.",
+    cta: "Pelajari lebih lanjut",
   },
 ]
 
@@ -70,35 +70,27 @@ export function ActivationsSection() {
           transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
           className="text-center mb-10"
         >
-          <motion.span
-            className="font-mono text-[#121212]/60 text-xs tracking-widest inline-block"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            ACTIVATIONS
-          </motion.span>
-          <h2 className="text-3xl md:text-5xl font-black text-[#121212] tracking-tighter mt-2 overflow-hidden">
-            <motion.span
-              className="inline-block"
-              initial={{ y: 100 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.2 }}
+
+          <div className="overflow-hidden">
+            <motion.h2
+              className="text-3xl md:text-4xl font-black text-black tracking-tight"
+              initial={{ y: 60 }}
+              animate={isInView ? { y: 0 } : { y: 60 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.15 }}
             >
-              EXPERIENCE{" "}
-            </motion.span>
-            <motion.span
-              className="text-[#AFFF00] inline-block"
-              initial={{ y: 100 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.3 }}
-            >
-              GIGI
-            </motion.span>
-          </h2>
+              Program Unggulan
+            </motion.h2>
+          </div>
+
+
+          {/* Animated underline */}
+          <motion.div
+            className="h-[2px] w-30 bg-[#AFFF00] mx-auto mt-3 mb-5 rounded-full"
+            initial={{ scaleX: 0 }}
+            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.4, 0.25, 1] }}
+          />
+
           <motion.p
             className="text-sm text-[#121212]/60 font-mono mt-2 max-w-xl mx-auto"
             initial={{ opacity: 0 }}
@@ -106,7 +98,7 @@ export function ActivationsSection() {
             viewport={{ once: true }}
             transition={{ delay: 0.4 }}
           >
-            From tasting events to corporate partnerships, bring Panti Asuhan Nugraha into your world.
+            PSAA Nugraha berkomitmen untuk terus memberdayakan anak-anak di sekitar panti dan kota Bandung yang membutuhkan uluran tangan untuk meningkatkan kesejahteraan dan kemandirian anak asuh dalam menyongsong kehidupan bermasyarakat dimasa depan.
           </motion.p>
         </motion.div>
 
@@ -126,14 +118,14 @@ export function ActivationsSection() {
                 scale: 1.02,
                 transition: { type: "spring", stiffness: 400, damping: 17 },
               }}
-              className="group bg-[#121212] rounded-2xl p-6 cursor-pointer relative overflow-hidden"
+              className="group bg-[#121212] rounded-2xl p-6 cursor-pointer relative overflow-hidden flex flex-col"
             >
               <motion.div
                 className="absolute inset-0 bg-[#AFFF00]/0 group-hover:bg-[#AFFF00]"
                 transition={{ duration: 0.4 }}
               />
 
-              <div className="relative z-10">
+              <div className="relative z-10 flex flex-col flex-1">
                 <motion.div
                   className="w-11 h-11 rounded-xl bg-[#AFFF00] flex items-center justify-center mb-4 group-hover:bg-[#121212] transition-colors duration-300"
                   whileHover={{ rotate: 10, scale: 1.1 }}
@@ -150,7 +142,7 @@ export function ActivationsSection() {
                 </p>
 
                 <motion.button
-                  className="flex items-center gap-2 text-[#AFFF00] group-hover:text-[#121212] font-bold text-xs tracking-wide transition-colors duration-300"
+                  className="flex items-center gap-2 text-[#AFFF00] group-hover:text-[#121212] font-bold text-xs tracking-wide transition-colors duration-300 mt-auto pt-2"
                   whileHover={{ x: 4 }}
                   transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 >
@@ -172,6 +164,6 @@ export function ActivationsSection() {
           ))}
         </motion.div>
       </div>
-    </section>
+    </section >
   )
 }

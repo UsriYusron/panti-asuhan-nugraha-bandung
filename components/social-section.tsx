@@ -6,12 +6,12 @@ import { Instagram } from "lucide-react"
 import Image from "next/image"
 
 const instagramPosts = [
-  { image: "/energy-drink-lifestyle-gym-workout.jpg", likes: "2.4k" },
-  { image: "/content-creator-streaming-setup-neon.jpg", likes: "1.8k" },
-  { image: "/skateboarder-urban-street-sunset.jpg", likes: "3.2k" },
-  { image: "/student-studying-library-late-night.jpg", likes: "956" },
-  { image: "/entrepreneur-startup-office-meeting.jpg", likes: "1.5k" },
-  { image: "/athlete-fitness-morning-routine.jpg", likes: "2.1k" },
+  { image: "/images/usri.jpg", likes: "2.4k" },
+  { image: "/images/yusron.jpg", likes: "1.8k" },
+  { image: "/images/usriyusron.jpg", likes: "3.2k" },
+  { image: "/images/psaa.jpg", likes: "956" },
+  { image: "/images/bukber.jpg", likes: "1.5k" },
+  { image: "/images/rame.jpg", likes: "2.1k" },
 ]
 
 const containerVariants = {
@@ -53,15 +53,6 @@ export function SocialSection() {
           transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
           className="text-center mb-10"
         >
-          <motion.span
-            className="font-mono text-[#AFFF00] text-xs tracking-widest inline-block"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            FOLLOW THE ENERGY
-          </motion.span>
           <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter mt-2 overflow-hidden">
             <motion.span
               className="inline-block"
@@ -70,7 +61,7 @@ export function SocialSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.2 }}
             >
-              @GIGIENERGY
+              Muhamad Usri Yusron as Software Engineer
             </motion.span>
             <motion.span
               className="text-[#AFFF00] inline-block"
@@ -79,7 +70,7 @@ export function SocialSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.3 }}
             >
-              .IN
+
             </motion.span>
           </h2>
         </motion.div>
@@ -137,7 +128,7 @@ export function SocialSection() {
           transition={{ delay: 0.5 }}
         >
           <motion.a
-            href="https://instagram.com/gigienergy.in"
+            href="https://www.instagram.com/psaa.nugraha/"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide relative overflow-hidden group"
@@ -151,7 +142,7 @@ export function SocialSection() {
               transition={{ duration: 0.6 }}
             />
             <Instagram className="w-4 h-4 relative z-10" />
-            <span className="relative z-10">Follow @gigienergy.in</span>
+            <span className="relative z-10">Follow @psaa.nugraha</span>
           </motion.a>
         </motion.div>
       </div>
