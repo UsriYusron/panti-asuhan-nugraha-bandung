@@ -39,6 +39,8 @@ const mobileMenuVariants = {
   },
 }
 
+const MotionLink = motion.create(Link)
+
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -61,11 +63,11 @@ export function Navigation() {
   }
 
   const navLinks = [
-    { label: "Profile", href: "" },
-    { label: "Data Anak", href: "" },
-    { label: "Laporan", href: "" },
-    { label: "Program Kegiatan", href: "" },
-    { label: "Careers", href: "" },
+    { label: "Profil Panti", href: "/profil" },
+    { label: "Galeri", href: "/galeri" },
+    { label: "Jadwal Kegiatan", href: "/jadwal" },
+    { label: "Berita & Pengumuman", href: "/berita" },
+    { label: "Pendaftaran Anak", href: "/pendaftaran" },
   ]
 
   return (
@@ -89,9 +91,10 @@ export function Navigation() {
 
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((item, i) => (
-            <motion.button
+            <MotionLink
               key={item.label}
-              onClick={() => scrollToSection(item.href)}
+              href={item.href}
+              onClick={() => setMobileMenuOpen(false)}
               className={`text-sm font-medium tracking-wide transition-colors relative ${scrolled ? "text-white/80 hover:text-[#AFFF00]" : "text-[#121212]/80 hover:text-[#121212]"
                 }`}
               initial={{ opacity: 0, y: -10 }}
@@ -107,16 +110,17 @@ export function Navigation() {
                 whileHover={{ scaleX: 1 }}
                 transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
               />
-            </motion.button>
+            </MotionLink>
           ))}
         </div>
 
-        <motion.button
-          className="hidden md:block bg-[#AFFF00] text-[#121212] px-6 py-2.5 rounded-full font-bold text-sm tracking-wide relative overflow-hidden"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-        >
+        <Link href="/login">
+          <motion.button
+            className="hidden md:block bg-[#AFFF00] text-[#121212] px-6 py-2.5 rounded-full font-bold text-sm tracking-wide relative overflow-hidden"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
           <motion.div
             className="absolute inset-0 bg-white/30"
             animate={{
@@ -134,7 +138,8 @@ export function Navigation() {
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
           />
           <span className="relative z-10">Login</span>
-        </motion.button>
+          </motion.button>
+        </Link>
 
         <motion.button
           className="md:hidden p-2"
@@ -178,25 +183,28 @@ export function Navigation() {
           >
             <div className="px-6 py-4 space-y-4">
               {navLinks.map((item, i) => (
-                <motion.button
+                <MotionLink
                   key={item.label}
-                  onClick={() => scrollToSection(item.href)}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
                   className="block w-full text-left text-white/80 hover:text-[#AFFF00] text-lg font-medium py-2"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
                   {item.label}
-                </motion.button>
+                </MotionLink>
               ))}
-              <motion.button
-                className="w-full bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide mt-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                Login
-              </motion.button>
+              <Link href="/login" className="block w-full">
+                <motion.button
+                  className="w-full bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide mt-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  Login
+                </motion.button>
+              </Link>
             </div>
           </motion.div>
         )}
