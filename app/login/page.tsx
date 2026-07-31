@@ -24,7 +24,12 @@ export default function LoginPage() {
     });
 
     if (res.ok) {
-      router.push("/admin");
+      const data = await res.json();
+      if (data.user?.role === "Pengunjung") {
+        router.push("/");
+      } else {
+        router.push("/admin");
+      }
     } else {
       const data = await res.json();
       setError(data.message || "Gagal login");
@@ -35,9 +40,9 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#121212] p-4">
       <Card className="w-full max-w-md bg-zinc-950 border-zinc-800 text-white">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold tracking-tight text-center">Login Admin</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight text-center">Login Akun</CardTitle>
           <CardDescription className="text-zinc-400 text-center">
-            Masukkan kredensial Anda untuk masuk ke dashboard
+            Masukkan kredensial Anda untuk masuk
           </CardDescription>
         </CardHeader>
         <CardContent>

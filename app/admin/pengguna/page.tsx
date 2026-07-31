@@ -31,6 +31,7 @@ export default function PenggunaPage() {
     });
     if (res.ok) {
       setIsOpen(false);
+      setFormData({ name: "", email: "", password: "", role: "Pengurus" });
       fetchData();
     } else {
       alert("Gagal menambahkan pengguna.");
@@ -74,6 +75,7 @@ export default function PenggunaPage() {
                 <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm" required value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})}>
                   <option value="Admin">Admin</option>
                   <option value="Pengurus">Pengurus</option>
+                  <option value="Pengunjung">Pengunjung</option>
                 </select>
               </div>
               <div className="flex justify-end mt-4">

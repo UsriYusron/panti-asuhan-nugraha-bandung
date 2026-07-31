@@ -2,9 +2,15 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import User from "@/models/User";
 import bcrypt from "bcryptjs";
+import { getSession } from "@/lib/auth";
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
+    const session = await getSession();
+    if (!session || session.role !== "Admin") {
+      return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
+    }
+
     await connectDB();
     const deletedUser = await User.findByIdAndDelete(params.id);
     if (!deletedUser) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
@@ -16,6 +22,11 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   try {
+    const session = await getSession();
+    if (!session || session.role !== "Admin") {
+      return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
+    }
+
     await connectDB();
     const body = await req.json();
     

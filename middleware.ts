@@ -15,16 +15,24 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
+    // Role protection: Pengunjung cannot access any admin pages
+    if (payload.role === "Pengunjung") {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
     // Role protection for users management (admin only)
     if (request.nextUrl.pathname.startsWith("/admin/pengguna") && payload.role !== "Admin") {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
 
-  // Redirect /login to /admin if already logged in
+  // Redirect /login if already logged in
   if (request.nextUrl.pathname.startsWith("/login") && session) {
     const payload = await verifyToken(session);
     if (payload) {
+      if (payload.role === "Pengunjung") {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
       return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
