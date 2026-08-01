@@ -52,9 +52,9 @@ export default function PenggunaPage() {
   const handleEdit = (item: any) => {
     setEditingId(item._id);
     setFormData({
-      name: item.name || "", 
-      email: item.email || "", 
-      password: "", 
+      name: item.name || "",
+      email: item.email || "",
+      password: "",
       role: item.role || "Pengurus"
     });
     setIsOpen(true);
@@ -86,37 +86,36 @@ export default function PenggunaPage() {
                 setFormData({ name: "", email: "", password: "", role: "Pengurus" });
               }} className="mb-4"><Plus className="mr-2 h-4 w-4" /> Tambah Pengguna</Button>
             </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>{editingId ? "Edit Pengguna" : "Tambah Pengguna Baru"}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label>Nama</Label>
-                <Input required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Email</Label>
-                <Input type="email" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Password {editingId && "(Kosongkan jika tidak ingin diubah)"}</Label>
-                <Input type="password" required={!editingId} value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Peran (Role)</Label>
-                <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm" required value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})}>
-                  <option value="Admin">Admin</option>
-                  <option value="Pengurus">Pengurus</option>
-                  <option value="Pengunjung">Pengunjung</option>
-                </select>
-              </div>
-              <div className="flex justify-end mt-4">
-                <Button type="submit">Simpan</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>{editingId ? "Edit Pengguna" : "Tambah Pengguna Baru"}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Nama</Label>
+                  <Input required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <Input type="email" required value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Password {editingId && "(Kosongkan jika tidak ingin diubah)"}</Label>
+                  <Input type="password" required={!editingId} value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Peran (Role)</Label>
+                  <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm" required value={formData.role} onChange={e => setFormData({ ...formData, role: e.target.value })}>
+                    <option value="Admin">Admin</option>
+                    <option value="Pengurus">Pengurus</option>
+                  </select>
+                </div>
+                <div className="flex justify-end mt-4">
+                  <Button type="submit">Simpan</Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
