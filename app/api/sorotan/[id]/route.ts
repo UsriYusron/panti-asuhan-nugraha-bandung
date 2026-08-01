@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
-import Anak from "@/models/Anak";
+import Sorotan from "@/models/Sorotan";
 import { getSession } from "@/lib/auth";
 
 export async function GET(req: Request, context: { params: any }) {
   try {
     const params = await context.params;
     await connectDB();
-    const anak = await Anak.findById(params.id);
-    if (!anak) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
-    return NextResponse.json(anak);
+    const sorotan = await Sorotan.findById(params.id);
+    if (!sorotan) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
+    return NextResponse.json(sorotan);
   } catch (error: any) {
     return NextResponse.json({ message: "Terjadi kesalahan", error: error.message }, { status: 500 });
   }
@@ -19,15 +19,15 @@ export async function PUT(req: Request, context: { params: any }) {
   try {
     const params = await context.params;
     const session = await getSession();
-    if (!session || session.role !== "Admin") {
+    if (!session || (session.role !== "Admin" && session.role !== "Pengurus")) {
       return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
     }
-
+    
     await connectDB();
     const body = await req.json();
-    const updatedAnak = await Anak.findByIdAndUpdate(params.id, body, { new: true });
-    if (!updatedAnak) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
-    return NextResponse.json(updatedAnak);
+    const updatedSorotan = await Sorotan.findByIdAndUpdate(params.id, body, { new: true });
+    if (!updatedSorotan) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
+    return NextResponse.json(updatedSorotan);
   } catch (error: any) {
     return NextResponse.json({ message: "Terjadi kesalahan", error: error.message }, { status: 500 });
   }
@@ -37,13 +37,13 @@ export async function DELETE(req: Request, context: { params: any }) {
   try {
     const params = await context.params;
     const session = await getSession();
-    if (!session || session.role !== "Admin") {
+    if (!session || (session.role !== "Admin" && session.role !== "Pengurus")) {
       return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
     }
-
+    
     await connectDB();
-    const deletedAnak = await Anak.findByIdAndDelete(params.id);
-    if (!deletedAnak) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
+    const deletedSorotan = await Sorotan.findByIdAndDelete(params.id);
+    if (!deletedSorotan) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
     return NextResponse.json({ message: "Data berhasil dihapus" });
   } catch (error: any) {
     return NextResponse.json({ message: "Terjadi kesalahan", error: error.message }, { status: 500 });

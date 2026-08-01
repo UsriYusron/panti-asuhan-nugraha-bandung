@@ -12,15 +12,15 @@ export default function PendaftaranPage() {
         <p className="text-white/70 mb-10 text-lg">
           Silakan isi formulir di bawah ini untuk mendaftarkan calon anak asuh ke Panti Asuhan Nugraha. Data yang Anda masukkan akan kami proses lebih lanjut.
         </p>
-        
+
         <div className="w-full bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800" style={{ height: "800px" }}>
           {/* Placeholder untuk Google Form iframe */}
-          <iframe 
-            src="https://docs.google.com/forms/d/e/1FAIpQLSfwPlaceholderGoogleForm/viewform?embedded=true" 
-            width="100%" 
-            height="100%" 
-            frameBorder="0" 
-            marginHeight={0} 
+          <iframe
+            src="https://docs.google.com/forms/d/e/1FAIpQLSf4uxq1FRAOSDFIRObbShI8czCasiToWR_sr6s6V1YPFRO6Pg/viewform?usp=publish-editor&embedded=true"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            marginHeight={0}
             marginWidth={0}
             title="Form Pendaftaran"
           >

@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { LayoutDashboard, Users, Calendar, Newspaper, LogOut, UserCheck } from "lucide-react";
+import { LayoutDashboard, Users, Calendar, Newspaper, LogOut, UserCheck, Image } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -27,7 +27,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    router.push("/");
   };
 
   return (
@@ -49,32 +49,44 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <SidebarContent className="p-2 gap-1">
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname === "/admin"} onClick={() => router.push("/admin")}>
+                <SidebarMenuButton className="mb-2" isActive={pathname === "/admin"} onClick={() => router.push("/admin")}>
                   <LayoutDashboard className="mr-2 h-4 w-4" />
                   <span>Dashboard</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/admin/anak")} onClick={() => router.push("/admin/anak")}>
+                <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/anak")} onClick={() => router.push("/admin/anak")}>
                   <Users className="mr-2 h-4 w-4" />
                   <span>Data Anak</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/admin/kegiatan")} onClick={() => router.push("/admin/kegiatan")}>
+                <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/kegiatan")} onClick={() => router.push("/admin/kegiatan")}>
                   <Calendar className="mr-2 h-4 w-4" />
                   <span>Jadwal Kegiatan</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={pathname.startsWith("/admin/berita")} onClick={() => router.push("/admin/berita")}>
+                <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/berita")} onClick={() => router.push("/admin/berita")}>
                   <Newspaper className="mr-2 h-4 w-4" />
                   <span>Berita & Pengumuman</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/sorotan")} onClick={() => router.push("/admin/sorotan")}>
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Sorotan / Carousel</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/galeri")} onClick={() => router.push("/admin/galeri")}>
+                  <Image className="mr-2 h-4 w-4" />
+                  <span>Galeri Foto</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               {currentUser?.role === "Admin" && (
                 <SidebarMenuItem>
-                  <SidebarMenuButton isActive={pathname.startsWith("/admin/pengguna")} onClick={() => router.push("/admin/pengguna")}>
+                  <SidebarMenuButton className="mb-6" isActive={pathname.startsWith("/admin/pengguna")} onClick={() => router.push("/admin/pengguna")}>
                     <Users className="mr-2 h-4 w-4" />
                     <span>Manajemen Pengguna</span>
                   </SidebarMenuButton>

@@ -11,9 +11,13 @@ const AnakSchema = new mongoose.Schema(
     namaWali: { type: String, required: true },
     kontakWali: { type: String, required: true },
     tanggalMasuk: { type: Date, default: Date.now },
-    status: { type: String, enum: ["Aktif", "Lulus", "Keluar"], default: "Aktif" },
+    gambar: { type: String },
+    status: { type: String, enum: ["Aktif", "Tidak Aktif", "Lulus", "Keluar"], default: "Aktif" },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Anak || mongoose.model("Anak", AnakSchema);
+if (mongoose.models.Anak) {
+  delete mongoose.models.Anak;
+}
+export default mongoose.model("Anak", AnakSchema);

@@ -7,35 +7,7 @@ import { useState } from "react"
 import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
-const flavors = [
-  {
-    id: 1,
-    name: "Selamat Atas Kelulusan",
-    tagline: "Prestasi",
-    description: "Keterima sebagai mahasiswa UIN Sunan Gunung Djati Bandung Jalur PTKIN 2026.",
-    image: "/images/gng jati.jpg",
-    bgColor: "from-[#84cc16]/20 via-[#84cc16]/10 to-transparent",
-    accentColor: "#84cc16",
-  },
-  {
-    id: 2,
-    name: "Nobar Persib",
-    tagline: "Kegiatan",
-    description: "Nonton bareng Persib vs Madura United bersama komunitas @vikingmovement dan @officialvpc.",
-    image: "/images/persib.jpg",
-    bgColor: "from-[#f59e0b]/20 via-[#f59e0b]/10 to-transparent",
-    accentColor: "#f59e0b",
-  },
-  {
-    id: 3,
-    name: "Kunjungan Donatur",
-    tagline: "Kegiatan",
-    description: "Bersama kakak-kakak dari Universitas Pendidikan Indonesia dalam acara worksop kewirausahaan .",
-    image: "/images/upi.jpg",
-    bgColor: "from-[#AFFF00]/20 via-[#AFFF00]/5 to-transparent",
-    accentColor: "#AFFF00",
-  },
-]
+import { useEffect } from "react"
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -69,8 +41,30 @@ const slideVariants = {
 }
 
 export function FlavorCarousel() {
+  const [flavors, setFlavors] = useState<any[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [[page, direction], setPage] = useState([0, 0])
+
+  useEffect(() => {
+    fetch("/api/sorotan")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.length > 0) {
+          const mapped = data.map((d: any) => ({
+            id: d._id,
+            name: d.judul,
+            tagline: d.tagline,
+            description: d.deskripsi,
+            image: d.gambar ? `/api/image/${d.gambar}` : "",
+            bgColor: d.bgColor,
+            accentColor: d.accentColor,
+          }))
+          setFlavors(mapped)
+        }
+      })
+      .catch(console.error)
+  }, [])
+
   const currentFlavor = flavors[currentIndex]
 
   const rotateX = useSpring(0, { stiffness: 150, damping: 20 })
@@ -99,6 +93,10 @@ export function FlavorCarousel() {
 
   const nextFlavor = () => paginate(1)
   const prevFlavor = () => paginate(-1)
+
+  if (flavors.length === 0 || !currentFlavor) {
+    return null;
+  }
 
   return (
     <section id="flavours" className="relative py-16 bg-white overflow-hidden">
@@ -134,7 +132,7 @@ export function FlavorCarousel() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
             >
-              CHOOSE YOUR{" "}
+              Muhamad Usri Yusron{" "}
             </motion.span>
             <motion.span
               className="inline-block"
@@ -144,9 +142,31 @@ export function FlavorCarousel() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.1 }}
             >
-              FUEL
+              as Software Engineer
             </motion.span>
           </h2>
+        </motion.div>
+
+
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
+          className="text-center mb-10"
+        >
+
+          <div className="mt-2">
+            <motion.h2
+              className="text-3xl md:text-4xl font-black text-[#121212] tracking-tight"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.15 }}
+            >
+              Tagline Minggu Ini
+            </motion.h2>
+          </div>
         </motion.div>
 
         {/* Carousel */}
@@ -241,8 +261,11 @@ export function FlavorCarousel() {
                       </motion.p>
 
                       {!currentFlavor.mystery && (
-                        <motion.button
-                          className="px-6 py-3 rounded-full font-bold text-sm tracking-wide w-full md:w-auto relative overflow-hidden"
+                        <motion.a
+                          href="https://www.instagram.com/psaa.nugraha/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-6 py-3 rounded-full font-bold text-sm tracking-wide w-full md:w-auto relative overflow-hidden inline-flex items-center justify-center"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -257,7 +280,7 @@ export function FlavorCarousel() {
                             transition={{ duration: 0.5 }}
                           />
                           <span className="relative z-10">Open on Instagram</span>
-                        </motion.button>
+                        </motion.a>
                       )}
 
                       {currentFlavor.mystery && (

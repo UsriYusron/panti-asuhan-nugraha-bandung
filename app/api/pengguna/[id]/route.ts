@@ -4,8 +4,9 @@ import User from "@/models/User";
 import bcrypt from "bcryptjs";
 import { getSession } from "@/lib/auth";
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context: { params: any }) {
   try {
+    const params = await context.params;
     const session = await getSession();
     if (!session || session.role !== "Admin") {
       return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
@@ -20,8 +21,9 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, context: { params: any }) {
   try {
+    const params = await context.params;
     const session = await getSession();
     if (!session || session.role !== "Admin") {
       return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });

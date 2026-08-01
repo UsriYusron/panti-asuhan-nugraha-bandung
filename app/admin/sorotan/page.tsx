@@ -11,22 +11,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { useDataTable } from "@/hooks/use-data-table";
 import { SearchBar, SortIndicator, TablePagination } from "@/components/ui/data-table-components";
 
-export default function BeritaPage() {
+export default function SorotanPage() {
   const [data, setData] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
-    judul: "", konten: "", penulis: "", gambar: ""
+    judul: "", tagline: "", deskripsi: "", gambar: "", 
+    bgColor: "", 
+    accentColor: ""
   });
 
   const {
     searchTerm, setSearchTerm, sortConfig, handleSort,
     currentPage, setCurrentPage, totalPages, paginatedData
-  } = useDataTable(data, ["judul", "penulis"], 10);
+  } = useDataTable(data, ["judul", "tagline"], 10);
 
   const fetchData = async () => {
-    const res = await fetch("/api/berita");
+    const res = await fetch("/api/sorotan");
     if (res.ok) setData(await res.json());
   };
 
@@ -52,7 +54,7 @@ export default function BeritaPage() {
       }
     }
 
-    const url = editingId ? `/api/berita/${editingId}` : "/api/berita";
+    const url = editingId ? `/api/sorotan/${editingId}` : "/api/sorotan";
     const method = editingId ? "PUT" : "POST";
     const res = await fetch(url, {
       method: method,
@@ -63,7 +65,11 @@ export default function BeritaPage() {
       setIsOpen(false);
       setEditingId(null);
       setImageFile(null);
-      setFormData({ judul: "", konten: "", penulis: "", gambar: "" });
+      setFormData({ 
+        judul: "", tagline: "", deskripsi: "", gambar: "", 
+        bgColor: "", 
+        accentColor: "" 
+      });
       fetchData();
     }
   };
@@ -73,16 +79,18 @@ export default function BeritaPage() {
     setImageFile(null);
     setFormData({
       judul: item.judul || "", 
-      konten: item.konten || "", 
-      penulis: item.penulis || "", 
-      gambar: item.gambar || ""
+      tagline: item.tagline || "", 
+      deskripsi: item.deskripsi || "", 
+      gambar: item.gambar || "",
+      bgColor: item.bgColor || "",
+      accentColor: item.accentColor || ""
     });
     setIsOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     if (confirm("Yakin ingin menghapus data ini?")) {
-      const res = await fetch(`/api/berita/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/sorotan/${id}`, { method: "DELETE" });
       if (res.ok) fetchData();
     }
   };
@@ -90,45 +98,54 @@ export default function BeritaPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Berita & Pengumuman</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Sorotan Utama (Carousel)</h1>
         <div className="flex items-center gap-2">
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari judul atau penulis..." />
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari judul atau tagline..." />
           <Dialog open={isOpen} onOpenChange={(open) => {
             setIsOpen(open);
             if (!open) {
               setEditingId(null);
               setImageFile(null);
-              setFormData({ judul: "", konten: "", penulis: "", gambar: "" });
+              setFormData({ 
+                judul: "", tagline: "", deskripsi: "", gambar: "", 
+                bgColor: "", 
+                accentColor: "" 
+              });
             }
           }}>
             <DialogTrigger asChild>
               <Button onClick={() => {
                 setEditingId(null);
                 setImageFile(null);
-                setFormData({ judul: "", konten: "", penulis: "", gambar: "" });
-              }} className="mb-4"><Plus className="mr-2 h-4 w-4" /> Tambah Berita</Button>
+                setFormData({ 
+                  judul: "", tagline: "", deskripsi: "", gambar: "", 
+                  bgColor: "", 
+                  accentColor: "" 
+                });
+              }} className="mb-4"><Plus className="mr-2 h-4 w-4" /> Tambah Sorotan</Button>
             </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>{editingId ? "Edit Berita" : "Tambah Berita"}</DialogTitle>
+              <DialogTitle>{editingId ? "Edit Sorotan" : "Tambah Sorotan"}</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label>Judul Berita</Label>
+                <Label>Judul Sorotan</Label>
                 <Input required value={formData.judul} onChange={e => setFormData({...formData, judul: e.target.value})} />
               </div>
               <div className="space-y-2">
-                <Label>Konten / Isi Berita</Label>
-                <Textarea required className="min-h-[150px]" value={formData.konten} onChange={e => setFormData({...formData, konten: e.target.value})} />
+                <Label>Tagline (Kategori)</Label>
+                <Input required value={formData.tagline} onChange={e => setFormData({...formData, tagline: e.target.value})} />
               </div>
               <div className="space-y-2">
-                <Label>Penulis</Label>
-                <Input required value={formData.penulis} onChange={e => setFormData({...formData, penulis: e.target.value})} />
+                <Label>Deskripsi</Label>
+                <Textarea required className="min-h-[100px]" value={formData.deskripsi} onChange={e => setFormData({...formData, deskripsi: e.target.value})} />
               </div>
               <div className="space-y-2">
-                <Label>Gambar Berita</Label>
+                <Label>Gambar (Background)</Label>
                 <Input type="file" accept="image/png, image/jpeg" onChange={e => setImageFile(e.target.files?.[0] || null)} />
               </div>
+
               <div className="flex justify-end mt-4">
                 <Button type="submit">Simpan</Button>
               </div>
@@ -146,11 +163,8 @@ export default function BeritaPage() {
               <TableHead className="cursor-pointer" onClick={() => handleSort("judul")}>
                 Judul <SortIndicator columnKey="judul" sortConfig={sortConfig} />
               </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("penulis")}>
-                Penulis <SortIndicator columnKey="penulis" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("tanggalPublikasi")}>
-                Tanggal Publikasi <SortIndicator columnKey="tanggalPublikasi" sortConfig={sortConfig} />
+              <TableHead className="cursor-pointer" onClick={() => handleSort("tagline")}>
+                Tagline <SortIndicator columnKey="tagline" sortConfig={sortConfig} />
               </TableHead>
               <TableHead className="text-right">Aksi</TableHead>
             </TableRow>
@@ -158,7 +172,7 @@ export default function BeritaPage() {
           <TableBody>
             {paginatedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">Tidak ada data</TableCell>
+                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Tidak ada data</TableCell>
               </TableRow>
             ) : paginatedData.map((item) => (
               <TableRow key={item._id}>
@@ -170,8 +184,7 @@ export default function BeritaPage() {
                   )}
                 </TableCell>
                 <TableCell className="font-medium">{item.judul}</TableCell>
-                <TableCell>{item.penulis}</TableCell>
-                <TableCell>{new Date(item.tanggalPublikasi).toLocaleDateString('id-ID')}</TableCell>
+                <TableCell>{item.tagline}</TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button variant="ghost" size="icon" onClick={() => handleEdit(item)}>
                     <Edit className="h-4 w-4 text-blue-500" />

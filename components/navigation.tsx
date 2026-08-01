@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useLenis } from "lenis/react"
 import { Menu, X } from "lucide-react"
 
@@ -45,6 +46,8 @@ export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const lenis = useLenis()
+  const pathname = usePathname()
+  const isHome = pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,7 +88,7 @@ export function Navigation() {
             whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-            <span className={scrolled ? "text-white" : "text-[#121212]"}>PSAA Nugraha</span>
+            <span className={scrolled || !isHome ? "text-white" : "text-[#121212]"}>PSAA Nugraha</span>
           </motion.span>
         </Link>
 
@@ -95,7 +98,7 @@ export function Navigation() {
               key={item.label}
               href={item.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`text-sm font-medium tracking-wide transition-colors relative ${scrolled ? "text-white/80 hover:text-[#AFFF00]" : "text-[#121212]/80 hover:text-[#121212]"
+              className={`text-sm font-medium tracking-wide transition-colors relative ${scrolled || !isHome ? "text-white/80 hover:text-[#AFFF00]" : "text-[#121212]/80 hover:text-[#121212]"
                 }`}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -115,30 +118,30 @@ export function Navigation() {
         </div>
 
         <Link href="/login">
-          <motion.button
-            className="hidden md:block bg-[#AFFF00] text-[#121212] px-6 py-2.5 rounded-full font-bold text-sm tracking-wide relative overflow-hidden"
+          <motion.div
+            className="hidden md:block bg-[#AFFF00] text-[#121212] px-6 py-2.5 rounded-full font-bold text-sm tracking-wide relative overflow-hidden cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
-          <motion.div
-            className="absolute inset-0 bg-white/30"
-            animate={{
-              boxShadow: [
-                "0 0 20px rgba(175,255,0,0.3)",
-                "0 0 40px rgba(175,255,0,0.6)",
-                "0 0 20px rgba(175,255,0,0.3)",
-              ],
-            }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full"
-            animate={{ x: ["-100%", "200%"] }}
-            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
-          />
-          <span className="relative z-10">Login</span>
-          </motion.button>
+            <motion.div
+              className="absolute inset-0 bg-white/30"
+              animate={{
+                boxShadow: [
+                  "0 0 20px rgba(175,255,0,0.3)",
+                  "0 0 40px rgba(175,255,0,0.6)",
+                  "0 0 20px rgba(175,255,0,0.3)",
+                ],
+              }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full"
+              animate={{ x: ["-100%", "200%"] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
+            />
+            <span className="relative z-10">Login</span>
+          </motion.div>
         </Link>
 
         <motion.button
@@ -155,7 +158,7 @@ export function Navigation() {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <X className={scrolled ? "text-white" : "text-[#121212]"} />
+                <X className={scrolled || !isHome ? "text-white" : "text-[#121212]"} />
               </motion.div>
             ) : (
               <motion.div
@@ -165,7 +168,7 @@ export function Navigation() {
                 exit={{ rotate: -90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Menu className={scrolled ? "text-white" : "text-[#121212]"} />
+                <Menu className={scrolled || !isHome ? "text-white" : "text-[#121212]"} />
               </motion.div>
             )}
           </AnimatePresence>
@@ -196,14 +199,14 @@ export function Navigation() {
                 </MotionLink>
               ))}
               <Link href="/login" className="block w-full">
-                <motion.button
-                  className="w-full bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide mt-4"
+                <motion.div
+                  className="w-full bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide mt-4 text-center cursor-pointer"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
                 >
                   Login
-                </motion.button>
+                </motion.div>
               </Link>
             </div>
           </motion.div>

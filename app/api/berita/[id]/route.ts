@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Berita from "@/models/Berita";
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, context: { params: any }) {
   try {
+    const params = await context.params;
     await connectDB();
     const berita = await Berita.findById(params.id);
     if (!berita) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
@@ -13,8 +14,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, context: { params: any }) {
   try {
+    const params = await context.params;
     await connectDB();
     const body = await req.json();
     const updatedBerita = await Berita.findByIdAndUpdate(params.id, body, { new: true });
@@ -25,8 +27,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context: { params: any }) {
   try {
+    const params = await context.params;
     await connectDB();
     const deletedBerita = await Berita.findByIdAndDelete(params.id);
     if (!deletedBerita) return NextResponse.json({ message: "Data tidak ditemukan" }, { status: 404 });
