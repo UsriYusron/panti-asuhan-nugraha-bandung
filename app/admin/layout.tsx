@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
-import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger } from "@/components/ui/sidebar";
 import { LayoutDashboard, Users, Calendar, Newspaper, LogOut, UserCheck, Image } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -101,8 +101,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <main className="flex-1 overflow-auto p-8 relative">
-          {children}
+        <main className="flex-1 flex flex-col relative w-full h-screen overflow-hidden">
+          <div className="md:hidden flex items-center p-4 border-b bg-slate-50 dark:bg-zinc-950 z-20 shrink-0">
+            <SidebarTrigger />
+            <span className="ml-3 font-semibold text-lg">Menu Admin</span>
+          </div>
+          <div className="p-4 sm:p-6 md:p-8 flex-1 overflow-y-auto">
+            {children}
+          </div>
         </main>
       </div>
     </SidebarProvider>
