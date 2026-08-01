@@ -7,3 +7,7 @@ http://localhost:3000/api/setup = untuk create ADMIN
 https://docs.google.com/forms/d/e/1FAIpQLSf4uxq1FRAOSDFIRObbShI8czCasiToWR_sr6s6V1YPFRO6Pg/viewform?usp=publish-editor
 
 https://forms.gle/zcoVQHaDJNuBFbfC8
+
+https://docs.google.com/spreadsheets/d/16ZOh8vKXgrX2ajw6IxUcj3yBuuVJ-YyISyUKqsPWncg/edit?usp=sharing
+
+

@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger } from "@/components/ui/sidebar";
-import { LayoutDashboard, Users, Calendar, Newspaper, LogOut, UserCheck, Image } from "lucide-react";
+import { LayoutDashboard, Users, Calendar, Newspaper, LogOut, UserCheck, Image, ClipboardList } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -82,6 +82,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/galeri")} onClick={() => router.push("/admin/galeri")}>
                   <Image className="mr-2 h-4 w-4" />
                   <span>Galeri Foto</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton className="mb-2" isActive={pathname.startsWith("/admin/form-responses")} onClick={() => router.push("/admin/form-responses")}>
+                  <ClipboardList className="mr-2 h-4 w-4" />
+                  <span>Respon GForm</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               {currentUser?.role === "Admin" && (
