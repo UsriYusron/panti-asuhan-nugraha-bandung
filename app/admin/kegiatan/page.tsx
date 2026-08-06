@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Trash, Edit } from "lucide-react";
+import { Plus, Trash, Edit, Calendar, Clock, MapPin, User, CalendarDays } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useDataTable } from "@/hooks/use-data-table";
-import { SearchBar, SortIndicator, TablePagination } from "@/components/ui/data-table-components";
+import { SearchBar, TablePagination } from "@/components/ui/data-table-components";
 
 export default function KegiatanPage() {
   const [data, setData] = useState<any[]>([]);
@@ -19,9 +18,9 @@ export default function KegiatanPage() {
   });
 
   const {
-    searchTerm, setSearchTerm, sortConfig, handleSort,
+    searchTerm, setSearchTerm,
     currentPage, setCurrentPage, totalPages, paginatedData
-  } = useDataTable(data, ["judul", "lokasi"], 10);
+  } = useDataTable(data, ["judul", "lokasi"], 9);
 
   const fetchData = async () => {
     const res = await fetch("/api/kegiatan");
@@ -68,10 +67,21 @@ export default function KegiatanPage() {
     }
   };
 
+  const statusConfig = (status: string) => {
+    switch(status) {
+      case "Berlangsung": return { color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300", dot: "bg-emerald-500" };
+      case "Selesai": return { color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300", dot: "bg-gray-400" };
+      default: return { color: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300", dot: "bg-blue-500" };
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Jadwal Kegiatan</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Jadwal Kegiatan</h1>
+          <p className="text-muted-foreground text-sm mt-1">{data.length} kegiatan terdaftar</p>
+        </div>
         <div className="flex items-center gap-2">
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari kegiatan atau lokasi..." />
           <Dialog open={isOpen} onOpenChange={(open) => {
@@ -85,7 +95,7 @@ export default function KegiatanPage() {
               <Button onClick={() => {
                 setEditingId(null);
                 setFormData({ judul: "", deskripsi: "", tanggal: "", waktu: "", lokasi: "", pic: "", status: "Akan Datang" });
-              }} className="mb-4"><Plus className="mr-2 h-4 w-4" /> Tambah Kegiatan</Button>
+              }}><Plus className="mr-2 h-4 w-4" /> Tambah Kegiatan</Button>
             </DialogTrigger>
           <DialogContent className="max-w-xl">
             <DialogHeader>
@@ -127,55 +137,77 @@ export default function KegiatanPage() {
         </div>
       </div>
 
-      <div className="rounded-md border bg-card overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("judul")}>
-                Judul <SortIndicator columnKey="judul" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("tanggal")}>
-                Tanggal <SortIndicator columnKey="tanggal" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead>Waktu</TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("lokasi")}>
-                Lokasi <SortIndicator columnKey="lokasi" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("pic")}>
-                PIC <SortIndicator columnKey="pic" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("status")}>
-                Status <SortIndicator columnKey="status" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">Tidak ada data</TableCell>
-              </TableRow>
-            ) : paginatedData.map((item) => (
-              <TableRow key={item._id}>
-                <TableCell className="font-medium">{item.judul}</TableCell>
-                <TableCell>{new Date(item.tanggal).toLocaleDateString('id-ID')}</TableCell>
-                <TableCell>{item.waktu}</TableCell>
-                <TableCell>{item.lokasi}</TableCell>
-                <TableCell>{item.pic}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell className="text-right space-x-2">
-                  <Button variant="ghost" size="icon" onClick={() => handleEdit(item)}>
-                    <Edit className="h-4 w-4 text-blue-500" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(item._id)}>
-                    <Trash className="h-4 w-4 text-red-500" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {/* Card Grid */}
+      {paginatedData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+          <CalendarDays className="h-12 w-12 mb-4 opacity-30" />
+          <p className="text-lg font-medium">Tidak ada kegiatan</p>
+          <p className="text-sm">Tambahkan jadwal kegiatan baru</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {paginatedData.map((item) => {
+            const sc = statusConfig(item.status);
+            return (
+              <div
+                key={item._id}
+                className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
+              >
+                {/* Date accent bar */}
+                <div className="bg-primary/5 border-b px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+                    <Calendar className="h-4 w-4" />
+                    {item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}
+                  </div>
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${sc.color}`}>
+                    <span className={`inline-block w-1.5 h-1.5 rounded-full ${sc.dot}`} />
+                    {item.status}
+                  </span>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-4 flex flex-col gap-2.5 flex-1">
+                  <h3 className="font-semibold text-sm leading-snug line-clamp-2">{item.judul}</h3>
+                  <p className="text-xs text-muted-foreground line-clamp-2">{item.deskripsi}</p>
+
+                  <div className="flex flex-col gap-1.5 mt-1">
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="h-3.5 w-3.5 shrink-0" />
+                      <span>{item.waktu || "-"}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <MapPin className="h-3.5 w-3.5 shrink-0" />
+                      <span className="line-clamp-1">{item.lokasi || "-"}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <User className="h-3.5 w-3.5 shrink-0" />
+                      <span>PIC: {item.pic || "-"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Footer — Actions */}
+                <div className="flex border-t">
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
+                  >
+                    <Edit className="h-3.5 w-3.5" /> Edit
+                  </button>
+                  <div className="w-px bg-border" />
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                  >
+                    <Trash className="h-3.5 w-3.5" /> Hapus
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       <TablePagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
     </div>
   );

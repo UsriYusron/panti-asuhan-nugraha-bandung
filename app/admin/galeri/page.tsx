@@ -7,22 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDataTable } from "@/hooks/use-data-table";
-import { SearchBar, SortIndicator, TablePagination } from "@/components/ui/data-table-components";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { SearchBar, TablePagination } from "@/components/ui/data-table-components";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 
 export default function AdminGaleri() {
@@ -36,9 +27,9 @@ export default function AdminGaleri() {
   const [file, setFile] = useState<File | null>(null);
 
   const {
-    searchTerm, setSearchTerm, sortConfig, handleSort,
+    searchTerm, setSearchTerm,
     currentPage, setCurrentPage, totalPages, paginatedData
-  } = useDataTable(galeriList, ["judul"], 10);
+  } = useDataTable(galeriList, ["judul"], 12);
 
   const fetchGaleri = async () => {
     try {
@@ -131,12 +122,15 @@ export default function AdminGaleri() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Kelola Galeri Foto</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Kelola Galeri Foto</h1>
+          <p className="text-muted-foreground text-sm mt-1">{galeriList.length} foto tersimpan</p>
+        </div>
         <div className="flex items-center gap-2">
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari judul..." />
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button className="mb-4">
+              <Button>
                 <Plus className="mr-2 h-4 w-4" /> Tambah Foto
               </Button>
             </DialogTrigger>
@@ -187,63 +181,61 @@ export default function AdminGaleri() {
         </div>
       </div>
 
-      <div className="rounded-md border bg-card overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-24">Gambar</TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("judul")}>
-                Judul / Keterangan <SortIndicator columnKey="judul" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                  <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
-                  Memuat data...
-                </TableCell>
-              </TableRow>
-            ) : paginatedData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={3} className="text-center py-8 text-muted-foreground">
-                  Belum ada data galeri foto.
-                </TableCell>
-              </TableRow>
-            ) : (
-              paginatedData.map((item: any) => (
-                <TableRow key={item._id}>
-                  <TableCell>
-                    <div className="h-16 w-24 rounded overflow-hidden bg-muted flex items-center justify-center">
-                      {item.gambar ? (
-                        <img 
-                          src={`/api/image/${item.gambar}`} 
-                          alt={item.judul} 
-                          className="h-full w-full object-cover" 
-                        />
-                      ) : (
-                        <ImageIcon className="h-6 w-6 text-muted-foreground" />
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-medium">{item.judul}</TableCell>
-                  <TableCell className="text-right">
-                    <Button 
-                      variant="destructive" 
-                      size="sm"
-                      onClick={() => handleDelete(item._id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      {/* Card Grid */}
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+          <Loader2 className="h-10 w-10 animate-spin mb-4 opacity-50" />
+          <p>Memuat galeri foto...</p>
+        </div>
+      ) : paginatedData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+          <ImageIcon className="h-12 w-12 mb-4 opacity-30" />
+          <p className="text-lg font-medium">Belum ada foto</p>
+          <p className="text-sm">Tambahkan foto pertama ke galeri</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          {paginatedData.map((item: any) => (
+            <div
+              key={item._id}
+              className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 group flex flex-col"
+            >
+              {/* Image */}
+              <div className="relative aspect-square bg-muted overflow-hidden">
+                {item.gambar ? (
+                  <img
+                    src={`/api/image/${item.gambar}`}
+                    alt={item.judul}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <ImageIcon className="h-8 w-8 text-muted-foreground/30" />
+                  </div>
+                )}
+                {/* Overlay on hover */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200" />
+              </div>
+
+              {/* Card Body */}
+              <div className="px-3 py-2 flex-1">
+                <p className="text-xs font-medium text-foreground line-clamp-2 leading-snug">{item.judul}</p>
+              </div>
+
+              {/* Card Footer */}
+              <div className="px-3 pb-3">
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-900/40 rounded-lg transition-colors"
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Hapus
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <TablePagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
     </div>
   );

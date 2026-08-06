@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Trash, Edit } from "lucide-react";
+import { Plus, Trash, Edit, Mail, ShieldCheck, ShieldAlert, User } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useDataTable } from "@/hooks/use-data-table";
-import { SearchBar, SortIndicator, TablePagination } from "@/components/ui/data-table-components";
+import { SearchBar, TablePagination } from "@/components/ui/data-table-components";
 
 export default function PenggunaPage() {
   const [data, setData] = useState<any[]>([]);
@@ -19,9 +18,9 @@ export default function PenggunaPage() {
   });
 
   const {
-    searchTerm, setSearchTerm, sortConfig, handleSort,
+    searchTerm, setSearchTerm,
     currentPage, setCurrentPage, totalPages, paginatedData
-  } = useDataTable(data, ["name", "email", "role"], 10);
+  } = useDataTable(data, ["name", "email", "role"], 12);
 
   const fetchData = async () => {
     const res = await fetch("/api/pengguna");
@@ -67,10 +66,35 @@ export default function PenggunaPage() {
     }
   };
 
+  const roleConfig = (role: string) => {
+    if (role === "Admin") return {
+      color: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
+      icon: <ShieldCheck className="h-3.5 w-3.5" />,
+    };
+    return {
+      color: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+      icon: <ShieldAlert className="h-3.5 w-3.5" />,
+    };
+  };
+
+  const getInitials = (name: string) =>
+    name?.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2) || "?";
+
+  const avatarColors = [
+    "from-violet-500 to-purple-600",
+    "from-blue-500 to-cyan-600",
+    "from-emerald-500 to-teal-600",
+    "from-orange-500 to-amber-600",
+    "from-rose-500 to-pink-600",
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Manajemen Pengguna</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Manajemen Pengguna</h1>
+          <p className="text-muted-foreground text-sm mt-1">{data.length} pengguna terdaftar</p>
+        </div>
         <div className="flex items-center gap-2">
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari nama atau email..." />
           <Dialog open={isOpen} onOpenChange={(open) => {
@@ -84,7 +108,7 @@ export default function PenggunaPage() {
               <Button onClick={() => {
                 setEditingId(null);
                 setFormData({ name: "", email: "", password: "", role: "Pengurus" });
-              }} className="mb-4"><Plus className="mr-2 h-4 w-4" /> Tambah Pengguna</Button>
+              }}><Plus className="mr-2 h-4 w-4" /> Tambah Pengguna</Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
@@ -119,45 +143,71 @@ export default function PenggunaPage() {
         </div>
       </div>
 
-      <div className="rounded-md border bg-card overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
-                Nama <SortIndicator columnKey="name" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("email")}>
-                Email <SortIndicator columnKey="email" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("role")}>
-                Role <SortIndicator columnKey="role" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Tidak ada data</TableCell>
-              </TableRow>
-            ) : paginatedData.map((item) => (
-              <TableRow key={item._id}>
-                <TableCell className="font-medium">{item.name}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.role}</TableCell>
-                <TableCell className="text-right space-x-2">
-                  <Button variant="ghost" size="icon" onClick={() => handleEdit(item)}>
-                    <Edit className="h-4 w-4 text-blue-500" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(item._id)}>
-                    <Trash className="h-4 w-4 text-red-500" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {/* Card Grid */}
+      {paginatedData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+          <User className="h-12 w-12 mb-4 opacity-30" />
+          <p className="text-lg font-medium">Tidak ada pengguna</p>
+          <p className="text-sm">Tambahkan pengguna pertama</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {paginatedData.map((item, idx) => {
+            const rc = roleConfig(item.role);
+            const colorClass = avatarColors[idx % avatarColors.length];
+            return (
+              <div
+                key={item._id}
+                className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
+              >
+                {/* Top gradient bar */}
+                <div className={`h-1.5 w-full bg-gradient-to-r ${colorClass}`} />
+
+                {/* Card Body */}
+                <div className="p-5 flex flex-col items-center text-center gap-3 flex-1">
+                  {/* Avatar */}
+                  <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${colorClass} flex items-center justify-center text-white text-xl font-bold shadow-md`}>
+                    {getInitials(item.name)}
+                  </div>
+
+                  {/* Name & Role */}
+                  <div>
+                    <h3 className="font-semibold text-base leading-tight">{item.name}</h3>
+                    <span className={`inline-flex items-center gap-1 mt-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${rc.color}`}>
+                      {rc.icon}
+                      {item.role}
+                    </span>
+                  </div>
+
+                  {/* Email */}
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground w-full justify-center">
+                    <Mail className="h-3.5 w-3.5 shrink-0" />
+                    <span className="truncate max-w-[160px]">{item.email}</span>
+                  </div>
+                </div>
+
+                {/* Card Footer — Actions */}
+                <div className="flex border-t">
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
+                  >
+                    <Edit className="h-3.5 w-3.5" /> Edit
+                  </button>
+                  <div className="w-px bg-border" />
+                  <button
+                    onClick={() => handleDelete(item._id)}
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                  >
+                    <Trash className="h-3.5 w-3.5" /> Hapus
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       <TablePagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
     </div>
   );

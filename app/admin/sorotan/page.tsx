@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Trash, Edit } from "lucide-react";
+import { Plus, Trash, Edit, Image as ImageIcon, Layers } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useDataTable } from "@/hooks/use-data-table";
-import { SearchBar, SortIndicator, TablePagination } from "@/components/ui/data-table-components";
+import { SearchBar, TablePagination } from "@/components/ui/data-table-components";
 
 export default function SorotanPage() {
   const [data, setData] = useState<any[]>([]);
@@ -23,9 +22,9 @@ export default function SorotanPage() {
   });
 
   const {
-    searchTerm, setSearchTerm, sortConfig, handleSort,
+    searchTerm, setSearchTerm,
     currentPage, setCurrentPage, totalPages, paginatedData
-  } = useDataTable(data, ["judul", "tagline"], 10);
+  } = useDataTable(data, ["judul", "tagline"], 9);
 
   const fetchData = async () => {
     const res = await fetch("/api/sorotan");
@@ -98,7 +97,10 @@ export default function SorotanPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Sorotan Utama (Carousel)</h1>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Sorotan Utama (Carousel)</h1>
+          <p className="text-muted-foreground text-sm mt-1">{data.length} slide aktif</p>
+        </div>
         <div className="flex items-center gap-2">
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari judul atau tagline..." />
           <Dialog open={isOpen} onOpenChange={(open) => {
@@ -122,7 +124,7 @@ export default function SorotanPage() {
                   bgColor: "", 
                   accentColor: "" 
                 });
-              }} className="mb-4"><Plus className="mr-2 h-4 w-4" /> Tambah Sorotan</Button>
+              }}><Plus className="mr-2 h-4 w-4" /> Tambah Sorotan</Button>
             </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
@@ -155,49 +157,74 @@ export default function SorotanPage() {
         </div>
       </div>
 
-      <div className="rounded-md border bg-card overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-12">Gambar</TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("judul")}>
-                Judul <SortIndicator columnKey="judul" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="cursor-pointer" onClick={() => handleSort("tagline")}>
-                Tagline <SortIndicator columnKey="tagline" sortConfig={sortConfig} />
-              </TableHead>
-              <TableHead className="text-right">Aksi</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {paginatedData.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">Tidak ada data</TableCell>
-              </TableRow>
-            ) : paginatedData.map((item) => (
-              <TableRow key={item._id}>
-                <TableCell>
-                  {item.gambar ? (
-                    <img src={`/api/image/${item.gambar}`} alt={item.judul} className="w-10 h-10 object-cover rounded-md" />
-                  ) : (
-                    <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center text-[10px] text-muted-foreground">No img</div>
-                  )}
-                </TableCell>
-                <TableCell className="font-medium">{item.judul}</TableCell>
-                <TableCell>{item.tagline}</TableCell>
-                <TableCell className="text-right space-x-2">
-                  <Button variant="ghost" size="icon" onClick={() => handleEdit(item)}>
-                    <Edit className="h-4 w-4 text-blue-500" />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(item._id)}>
-                    <Trash className="h-4 w-4 text-red-500" />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {/* Card Grid */}
+      {paginatedData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+          <Layers className="h-12 w-12 mb-4 opacity-30" />
+          <p className="text-lg font-medium">Tidak ada slide sorotan</p>
+          <p className="text-sm">Tambahkan slide pertama untuk carousel</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {paginatedData.map((item, idx) => (
+            <div
+              key={item._id}
+              className="bg-card border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col"
+            >
+              {/* Thumbnail with overlay */}
+              <div className="relative h-48 bg-muted">
+                {item.gambar ? (
+                  <img
+                    src={`/api/image/${item.gambar}`}
+                    alt={item.judul}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <ImageIcon className="h-12 w-12 text-muted-foreground/30" />
+                  </div>
+                )}
+                {/* Slide number badge */}
+                <div className="absolute top-2 left-2 bg-black/60 text-white text-[11px] px-2.5 py-1 rounded-full font-medium">
+                  Slide #{idx + 1}
+                </div>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                {/* Tagline on image */}
+                <div className="absolute bottom-2 left-3">
+                  <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-[11px] px-2 py-0.5 rounded-full border border-white/30">
+                    {item.tagline}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-4 flex flex-col gap-1.5 flex-1">
+                <h3 className="font-semibold text-sm leading-snug line-clamp-2">{item.judul}</h3>
+                <p className="text-xs text-muted-foreground line-clamp-3 flex-1">{item.deskripsi}</p>
+              </div>
+
+              {/* Card Footer — Actions */}
+              <div className="flex border-t">
+                <button
+                  onClick={() => handleEdit(item)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors"
+                >
+                  <Edit className="h-3.5 w-3.5" /> Edit
+                </button>
+                <div className="w-px bg-border" />
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                >
+                  <Trash className="h-3.5 w-3.5" /> Hapus
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <TablePagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
     </div>
   );
