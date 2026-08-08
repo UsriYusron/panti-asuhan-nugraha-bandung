@@ -48,7 +48,7 @@ export default function FormResponsesPage() {
         <h1 className="text-3xl font-bold tracking-tight">Respon Formulir</h1>
         <div className="flex items-center gap-2">
           <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Cari data..." />
-          <Button onClick={fetchData} variant="outline" disabled={loading} className="mb-4">
+          <Button onClick={fetchData} variant="outline" disabled={loading}>
             <RefreshCcw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             Segarkan
           </Button>
@@ -60,45 +60,46 @@ export default function FormResponsesPage() {
           {error}
         </div>
       ) : (
-        <div className="rounded-md border bg-card overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>No</TableHead>
-                {headers.map((header) => (
-                  <TableHead key={header} onClick={() => handleSort(header)} className="cursor-pointer whitespace-nowrap">
-                    {header} <SortIndicator columnKey={header} sortConfig={sortConfig} />
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell colSpan={headers.length + 1} className="text-center h-24">
-                    Memuat data...
-                  </TableCell>
-                </TableRow>
-              ) : paginatedData.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={headers.length + 1} className="text-center h-24">
-                    Tidak ada data ditemukan.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                paginatedData.map((item, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{(currentPage - 1) * 10 + index + 1}</TableCell>
-                    {headers.map((header) => (
-                      <TableCell key={header} className="whitespace-nowrap">
-                        {item[header]}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {loading ? (
+            <div className="col-span-full flex justify-center py-12 text-muted-foreground">
+              Memuat data...
+            </div>
+          ) : paginatedData.length === 0 ? (
+            <div className="col-span-full flex justify-center py-12 text-muted-foreground">
+              Tidak ada data ditemukan.
+            </div>
+          ) : (
+            paginatedData.map((item, index) => (
+              <div key={index} className="bg-[#0D0D0D] border border-[#1F1F1F] rounded-2xl p-6 shadow-sm hover:border-[#86efac]/30 transition-colors flex flex-col h-full">
+                <div className="flex items-center justify-between mb-5 border-b border-[#1F1F1F] pb-4">
+                  <span className="font-bold text-lg text-[#E7E7E7]">
+                    Respon #{(currentPage - 1) * 10 + index + 1}
+                  </span>
+                  {item["Timestamp"] && (
+                    <span className="text-[10px] text-[#919191] bg-[#1F1F1F] px-2 py-1 rounded-md font-medium tracking-wider">
+                      {item["Timestamp"]}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-5 flex-grow">
+                  {headers.map((header) => {
+                    if (header === "Timestamp") return null;
+                    return (
+                      <div key={header} className="flex flex-col gap-1.5">
+                        <span className="text-[11px] font-semibold text-[#86efac] uppercase tracking-widest leading-relaxed">
+                          {header}
+                        </span>
+                        <span className="text-sm font-medium text-[#E7E7E7] leading-relaxed break-words whitespace-pre-wrap">
+                          {item[header] || "-"}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
 

@@ -12,7 +12,7 @@ interface SearchBarProps {
 
 export function SearchBar({ searchTerm, setSearchTerm, placeholder = "Cari data..." }: SearchBarProps) {
   return (
-    <div className="relative w-full md:w-72 mb-4">
+    <div className="relative w-full md:w-72">
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         placeholder={placeholder}

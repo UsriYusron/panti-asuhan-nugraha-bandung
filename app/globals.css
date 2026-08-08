@@ -221,3 +221,12 @@
   pointer-events: none;
   animation: grain 8s steps(10) infinite;
 }
+
+/* Hide scrollbar utility for admin dashboard */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

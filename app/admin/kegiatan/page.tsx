@@ -70,7 +70,8 @@ export default function KegiatanPage() {
   const statusConfig = (status: string) => {
     switch(status) {
       case "Berlangsung": return { color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300", dot: "bg-emerald-500" };
-      case "Selesai": return { color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300", dot: "bg-gray-400" };
+      case "Selesai":
+      case "Sudah Berlalu": return { color: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300", dot: "bg-gray-400" };
       default: return { color: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300", dot: "bg-blue-500" };
     }
   };
@@ -147,7 +148,22 @@ export default function KegiatanPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {paginatedData.map((item) => {
-            const sc = statusConfig(item.status);
+            let currentStatus = item.status || "Akan Datang";
+            if (item.tanggal) {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              const activityDate = new Date(item.tanggal);
+              activityDate.setHours(0, 0, 0, 0);
+              
+              if (activityDate.getTime() < today.getTime()) {
+                currentStatus = "Sudah Berlalu";
+              } else if (activityDate.getTime() === today.getTime()) {
+                currentStatus = "Berlangsung";
+              } else {
+                currentStatus = "Akan Datang";
+              }
+            }
+            const sc = statusConfig(currentStatus);
             return (
               <div
                 key={item._id}
@@ -161,7 +177,7 @@ export default function KegiatanPage() {
                   </div>
                   <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${sc.color}`}>
                     <span className={`inline-block w-1.5 h-1.5 rounded-full ${sc.dot}`} />
-                    {item.status}
+                    {currentStatus}
                   </span>
                 </div>
 

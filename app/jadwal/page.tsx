@@ -12,7 +12,31 @@ export default function JadwalPage() {
   useEffect(() => {
     fetch("/api/kegiatan")
       .then(res => res.json())
-      .then(data => setKegiatan(data))
+      .then(data => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const upcomingAndCurrent = data.filter((item: any) => {
+          if (!item.tanggal) return true;
+          const activityDate = new Date(item.tanggal);
+          activityDate.setHours(0, 0, 0, 0);
+          return activityDate.getTime() >= today.getTime();
+        }).map((item: any) => {
+          let currentStatus = item.status || "Akan Datang";
+          if (item.tanggal) {
+            const activityDate = new Date(item.tanggal);
+            activityDate.setHours(0, 0, 0, 0);
+            if (activityDate.getTime() === today.getTime()) {
+              currentStatus = "Berlangsung";
+            } else if (activityDate.getTime() > today.getTime()) {
+              currentStatus = "Akan Datang";
+            }
+          }
+          return { ...item, status: currentStatus };
+        });
+
+        setKegiatan(upcomingAndCurrent);
+      })
       .catch(console.error);
   }, []);
 
@@ -35,11 +59,10 @@ export default function JadwalPage() {
               <Card key={item._id} className="bg-zinc-900 border-zinc-800 text-white flex flex-col h-full">
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">
-                    <span className={`px-3 py-1 text-xs font-bold rounded-full ${
-                      item.status === 'Akan Datang' ? 'bg-blue-500/20 text-blue-400' :
+                    <span className={`px-3 py-1 text-xs font-bold rounded-full ${item.status === 'Akan Datang' ? 'bg-blue-500/20 text-blue-400' :
                       item.status === 'Berlangsung' ? 'bg-green-500/20 text-green-400' :
-                      'bg-zinc-500/20 text-zinc-400'
-                    }`}>
+                        'bg-zinc-500/20 text-zinc-400'
+                      }`}>
                       {item.status}
                     </span>
                   </div>
