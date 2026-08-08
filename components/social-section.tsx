@@ -1,10 +1,24 @@
 "use client"
 
 import { motion, useInView } from "framer-motion"
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { Instagram } from "lucide-react"
 import Image from "next/image"
-import CircularGallery, { GalleryItem } from "./circular-gallery"
+import LogoLoop from "./logo-loop"
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTypescript,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiPrisma,
+  SiPostgresql,
+  SiGit,
+  SiDocker,
+  SiVercel,
+  SiJavascript,
+  SiFigma,
+} from "react-icons/si"
 
 const instagramPosts = [
   { image: "/images/usri.jpg", likes: "2.4k" },
@@ -13,6 +27,21 @@ const instagramPosts = [
   { image: "/images/psaa.jpg", likes: "956" },
   { image: "/images/bukber.jpg", likes: "1.5k" },
   { image: "/images/rame.jpg", likes: "2.1k" },
+]
+
+const techLogos = [
+  { node: <SiReact />, title: "React", href: "https://react.dev" },
+  { node: <SiNextdotjs />, title: "Next.js", href: "https://nextjs.org" },
+  { node: <SiTypescript />, title: "TypeScript", href: "https://www.typescriptlang.org" },
+  { node: <SiTailwindcss />, title: "Tailwind CSS", href: "https://tailwindcss.com" },
+  { node: <SiNodedotjs />, title: "Node.js", href: "https://nodejs.org" },
+  { node: <SiPrisma />, title: "Prisma", href: "https://www.prisma.io" },
+  { node: <SiPostgresql />, title: "PostgreSQL", href: "https://www.postgresql.org" },
+  { node: <SiGit />, title: "Git", href: "https://git-scm.com" },
+  { node: <SiDocker />, title: "Docker", href: "https://www.docker.com" },
+  { node: <SiVercel />, title: "Vercel", href: "https://vercel.com" },
+  { node: <SiJavascript />, title: "JavaScript", href: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+  { node: <SiFigma />, title: "Figma", href: "https://www.figma.com" },
 ]
 
 const containerVariants = {
@@ -43,40 +72,6 @@ const itemVariants = {
 export function SocialSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([])
-
-  useEffect(() => {
-    async function fetchAnakImages() {
-      try {
-        const res = await fetch("/api/anak")
-        if (!res.ok) throw new Error("Failed to fetch")
-        const data = await res.json()
-
-        // Map anak records that have a gambar field to gallery items
-        const items: GalleryItem[] = (data as Array<{ namaLengkap: string; gambar?: string }>)
-          .filter((anak) => anak.gambar)
-          .map((anak) => {
-            // Check if it's already a full URL or relative path, otherwise it's an ID
-            const imageStr = anak.gambar as string;
-            const imageUrl = (imageStr.startsWith('http') || imageStr.startsWith('/')) 
-              ? imageStr 
-              : `/api/image/${imageStr}`;
-              
-            return {
-              image: imageUrl,
-              text: anak.namaLengkap,
-            };
-          })
-
-        setGalleryItems(items)
-      } catch (err) {
-        console.error("CircularGallery: failed to load anak data", err)
-      }
-    }
-
-    fetchAnakImages()
-  }, [])
-
   return (
     <section id="creators" className="relative py-16 bg-[#121212] overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
@@ -154,27 +149,34 @@ export function SocialSection() {
           ))}
         </motion.div>
 
-        {/* CircularGallery — shows anak photos from the database */}
+        {/* Tech Stack LogoLoop */}
         <motion.div
           className="mt-12"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1], delay: 0.2 }}
+          transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1], delay: 0.2 }}
         >
-          <div style={{ height: "500px", position: "relative" }}>
-            <CircularGallery
-              items={galleryItems.length > 0 ? galleryItems : undefined}
-              bend={4}
-              textColor="#ffffff"
-              borderRadius={0.04}
-              scrollEase={0.02}
-            />
-          </div>
+          <p className="text-center text-xs uppercase tracking-[0.25em] text-white/30 mb-6 font-mono">
+            Tech Stack
+          </p>
+          <LogoLoop
+            logos={techLogos}
+            speed={80}
+            direction="left"
+            logoHeight={64}
+            gap={48}
+            hoverSpeed={0}
+            scaleOnHover
+            fadeOut
+            fadeOutColor="#121212"
+            ariaLabel="Tech stack used by Muhamad Usri Yusron"
+            className="text-white/60 [&_a:hover]:text-[#AFFF00] [&_a]:transition-colors [&_a]:duration-300"
+          />
         </motion.div>
 
         <motion.div
-          className="flex justify-center mt-8"
+          className="flex justify-center mt-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -202,4 +204,3 @@ export function SocialSection() {
     </section>
   )
 }
-
