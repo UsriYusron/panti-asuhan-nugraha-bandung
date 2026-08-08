@@ -1,9 +1,10 @@
 "use client"
 
 import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Instagram } from "lucide-react"
 import Image from "next/image"
+import CircularGallery, { GalleryItem } from "./circular-gallery"
 
 const instagramPosts = [
   { image: "/images/usri.jpg", likes: "2.4k" },
@@ -42,6 +43,39 @@ const itemVariants = {
 export function SocialSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-50px" })
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([])
+
+  useEffect(() => {
+    async function fetchAnakImages() {
+      try {
+        const res = await fetch("/api/anak")
+        if (!res.ok) throw new Error("Failed to fetch")
+        const data = await res.json()
+
+        // Map anak records that have a gambar field to gallery items
+        const items: GalleryItem[] = (data as Array<{ namaLengkap: string; gambar?: string }>)
+          .filter((anak) => anak.gambar)
+          .map((anak) => {
+            // Check if it's already a full URL or relative path, otherwise it's an ID
+            const imageStr = anak.gambar as string;
+            const imageUrl = (imageStr.startsWith('http') || imageStr.startsWith('/')) 
+              ? imageStr 
+              : `/api/image/${imageStr}`;
+              
+            return {
+              image: imageUrl,
+              text: anak.namaLengkap,
+            };
+          })
+
+        setGalleryItems(items)
+      } catch (err) {
+        console.error("CircularGallery: failed to load anak data", err)
+      }
+    }
+
+    fetchAnakImages()
+  }, [])
 
   return (
     <section id="creators" className="relative py-16 bg-[#121212] overflow-hidden">
@@ -120,6 +154,25 @@ export function SocialSection() {
           ))}
         </motion.div>
 
+        {/* CircularGallery — shows anak photos from the database */}
+        <motion.div
+          className="mt-12"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1], delay: 0.2 }}
+        >
+          <div style={{ height: "500px", position: "relative" }}>
+            <CircularGallery
+              items={galleryItems.length > 0 ? galleryItems : undefined}
+              bend={4}
+              textColor="#ffffff"
+              borderRadius={0.04}
+              scrollEase={0.02}
+            />
+          </div>
+        </motion.div>
+
         <motion.div
           className="flex justify-center mt-8"
           initial={{ opacity: 0, y: 20 }}
@@ -149,3 +202,4 @@ export function SocialSection() {
     </section>
   )
 }
+
