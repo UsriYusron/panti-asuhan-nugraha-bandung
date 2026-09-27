@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users, CalendarDays, Newspaper, Activity, Wallet } from "lucide-react";
+import { Users, CalendarDays, Newspaper, Activity, Wallet, HeartHandshake } from "lucide-react";
 
 interface DashboardStats {
   countAnak: number;
   countKegiatanBulanIni: number;
   countBerita: number;
   jadwalTerdekat: unknown[];
+  countDonasi?: number;
+  totalDonasiNominal?: number;
 }
 
 function MetricSkeleton() {
@@ -120,12 +122,28 @@ export default function AdminDashboard() {
             </div>
             <span className="text-xs text-[#86efac] font-medium">Kegiatan akan datang</span>
           </div>
+          {/* Total Donasi */}
+          <div className="bg-[#0D0D0D] rounded-2xl p-6 flex flex-col gap-2 group hover:bg-[#141414] transition-colors md:col-span-2 lg:col-span-4 border border-[#1F1F1F] hover:border-[#86efac]/30">
+            <div className="flex items-center justify-between text-[#919191]">
+              <span className="text-xs font-semibold tracking-widest">TOTAL DONASI TERHIMPUN</span>
+              <HeartHandshake className="h-5 w-5 text-[#86efac]" />
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mt-1">
+              <span className="text-3xl sm:text-4xl font-bold text-[#86efac]">
+                {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(stats?.totalDonasiNominal ?? 0)}
+              </span>
+              <span className="text-xs text-[#919191]">
+                dari <strong className="text-white">{stats?.countDonasi ?? 0}</strong> transaksi tercatat
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Quick links */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[
+          { label: "Laporan Donasi", href: "/admin/donasi", desc: "Kelola & impor donasi dari file Excel" },
           { label: "Tambah Anak Asuh", href: "/admin/anak", desc: "Daftarkan anak asuh baru ke sistem" },
           { label: "Buat Berita", href: "/admin/berita", desc: "Tulis dan publish artikel berita" },
           { label: "Jadwal Kegiatan", href: "/admin/kegiatan", desc: "Atur jadwal dan kegiatan panti" },

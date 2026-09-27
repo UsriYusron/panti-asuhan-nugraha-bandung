@@ -10,6 +10,7 @@ import {
   Image,
   ClipboardList,
   Star,
+  HeartHandshake,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -26,6 +27,7 @@ const navItems = [
   { label: "SOROTAN", icon: Star, href: "/admin/sorotan" },
   { label: "GALERI", icon: Image, href: "/admin/galeri" },
   { label: "FORM RESPON", icon: ClipboardList, href: "/admin/form-responses" },
+  { label: "LAPORAN DONASI", icon: HeartHandshake, href: "/admin/donasi" },
 ];
 
 export function AdminSidebar({ role, onLogout, className = "" }: AdminSidebarProps) {

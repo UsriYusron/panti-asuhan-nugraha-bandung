@@ -3,6 +3,7 @@ import connectDB from "@/lib/db";
 import Anak from "@/models/Anak";
 import Kegiatan from "@/models/Kegiatan";
 import Berita from "@/models/Berita";
+import Donasi from "@/models/Donasi";
 
 export async function GET() {
   try {
@@ -24,11 +25,19 @@ export async function GET() {
       tanggal: { $gte: now }
     }).sort({ tanggal: 1 }).limit(3);
 
+    const countDonasi = await Donasi.countDocuments();
+    const donasiAgg = await Donasi.aggregate([
+      { $group: { _id: null, total: { $sum: "$nominal" } } }
+    ]);
+    const totalDonasiNominal = donasiAgg[0]?.total || 0;
+
     return NextResponse.json({
       countAnak,
       countKegiatanBulanIni,
       countBerita,
-      jadwalTerdekat
+      jadwalTerdekat,
+      countDonasi,
+      totalDonasiNominal,
     });
   } catch (error: any) {
     return NextResponse.json({ message: "Terjadi kesalahan", error: error.message }, { status: 500 });
