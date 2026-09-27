@@ -226,7 +226,18 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Invert theme for admin light mode since colors are hardcoded dark */
+.theme-light {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.theme-light img,
+.theme-light video {
+  filter: invert(1) hue-rotate(180deg);
 }

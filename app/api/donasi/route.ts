@@ -5,11 +5,8 @@ import { getSession } from "@/lib/auth";
 
 export async function GET(req: Request) {
   try {
-    const session = await getSession();
-    if (!session || (session.role !== "Admin" && session.role !== "Pengurus")) {
-      return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
-    }
-
+    // Session check removed to allow public access to Laporan Donasi
+    
     await connectDB();
     const url = new URL(req.url);
     const search = url.searchParams.get("search") || "";

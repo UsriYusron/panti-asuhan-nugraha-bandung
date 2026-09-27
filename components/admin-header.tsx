@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings2, LogOut, UserCheck, Menu } from "lucide-react";
+import { Settings2, LogOut, UserCheck, Menu, Sun, Moon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +12,11 @@ interface AdminHeaderProps {
   user: { name: string; email: string; role: string } | null;
   onLogout: () => void;
   onMenuClick?: () => void;
+  theme?: "dark" | "light";
+  onToggleTheme?: () => void;
 }
 
-export function AdminHeader({ user, onLogout, onMenuClick }: AdminHeaderProps) {
+export function AdminHeader({ user, onLogout, onMenuClick, theme = "dark", onToggleTheme }: AdminHeaderProps) {
   return (
     <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-black/10 backdrop-blur-[120px]">
       {/* Brand */}
@@ -42,6 +44,15 @@ export function AdminHeader({ user, onLogout, onMenuClick }: AdminHeaderProps) {
             </span>
           </div>
         )}
+
+        {/* Theme Toggle Button */}
+        <button 
+          onClick={onToggleTheme}
+          className="p-2 text-[#919191] hover:text-white bg-[#0D0D0D] border border-[#1F1F1F] hover:bg-[#1A1A1A] rounded-full transition-colors focus:outline-none"
+          title="Ubah Tema"
+        >
+          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

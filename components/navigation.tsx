@@ -71,6 +71,7 @@ export function Navigation() {
     { label: "Jadwal Kegiatan", href: "/jadwal" },
     { label: "Berita & Pengumuman", href: "/berita" },
     { label: "Pendaftaran Anak", href: "/pendaftaran" },
+    { label: "Laporan Donasi", href: "/laporan-donasi" },
   ]
 
   return (
