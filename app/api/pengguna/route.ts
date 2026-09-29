@@ -12,6 +12,7 @@ export async function GET() {
     }
 
     await connectDB();
+    // Exclude hashed password, but include plainPassword
     const users = await User.find({}, "-password");
     return NextResponse.json(users);
   } catch (error: any) {
@@ -35,7 +36,7 @@ export async function POST(req: Request) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.create({ name, email, password: hashedPassword, role });
+    await User.create({ name, email, password: hashedPassword, plainPassword: password, role });
     
     return NextResponse.json({ message: "Pengguna berhasil dibuat" }, { status: 201 });
   } catch (error: any) {

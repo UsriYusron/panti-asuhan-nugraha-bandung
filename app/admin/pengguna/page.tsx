@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash, Edit, Mail, ShieldCheck, ShieldAlert, User } from "lucide-react";
+import { Plus, Trash, Edit, Mail, ShieldCheck, ShieldAlert, User, Eye, EyeOff, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -16,6 +16,12 @@ export default function PenggunaPage() {
   const [formData, setFormData] = useState({
     name: "", email: "", password: "", role: "Pengurus"
   });
+  const [showPasswordMap, setShowPasswordMap] = useState<Record<string, boolean>>({});
+  const [showFormPassword, setShowFormPassword] = useState(false);
+
+  const togglePassword = (id: string) => {
+    setShowPasswordMap(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const {
     searchTerm, setSearchTerm,
@@ -102,6 +108,7 @@ export default function PenggunaPage() {
             if (!open) {
               setEditingId(null);
               setFormData({ name: "", email: "", password: "", role: "Pengurus" });
+              setShowFormPassword(false);
             }
           }}>
             <DialogTrigger asChild>
@@ -125,7 +132,24 @@ export default function PenggunaPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Password {editingId && "(Kosongkan jika tidak ingin diubah)"}</Label>
-                  <Input type="password" required={!editingId} value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} />
+                  <div className="relative">
+                    <Input
+                      type={showFormPassword ? "text" : "password"}
+                      required={!editingId}
+                      value={formData.password}
+                      onChange={e => setFormData({ ...formData, password: e.target.value })}
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowFormPassword(p => !p)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      tabIndex={-1}
+                      title={showFormPassword ? "Sembunyikan password" : "Tampilkan password"}
+                    >
+                      {showFormPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label>Peran (Role)</Label>
@@ -183,6 +207,25 @@ export default function PenggunaPage() {
                   <div className="flex items-center gap-1.5 text-xs text-muted-foreground w-full justify-center">
                     <Mail className="h-3.5 w-3.5 shrink-0" />
                     <span className="truncate max-w-[160px]">{item.email}</span>
+                  </div>
+
+                  {/* Password */}
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground w-full justify-center">
+                    <Lock className="h-3.5 w-3.5 shrink-0" />
+                    <span className="font-mono tracking-widest">
+                      {showPasswordMap[item._id]
+                        ? (item.plainPassword || <em className="not-italic opacity-50">belum diset</em>)
+                        : "••••••••"}
+                    </span>
+                    <button
+                      onClick={() => togglePassword(item._id)}
+                      className="ml-0.5 text-muted-foreground hover:text-foreground transition-colors"
+                      title={showPasswordMap[item._id] ? "Sembunyikan password" : "Tampilkan password"}
+                    >
+                      {showPasswordMap[item._id]
+                        ? <EyeOff className="h-3.5 w-3.5" />
+                        : <Eye className="h-3.5 w-3.5" />}
+                    </button>
                   </div>
                 </div>
 

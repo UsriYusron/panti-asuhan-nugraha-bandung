@@ -33,6 +33,7 @@ export async function PUT(req: Request, context: { params: any }) {
     const body = await req.json();
     
     if (body.password) {
+      body.plainPassword = body.password; // save original before hashing
       body.password = await bcrypt.hash(body.password, 10);
     } else {
       delete body.password;

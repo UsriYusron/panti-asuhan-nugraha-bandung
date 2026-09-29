@@ -15,6 +15,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    plainPassword: {
+      type: String,
+      default: "",
+    },
     role: {
       type: String,
       enum: ["Admin", "Pengurus", "Pengunjung"],
@@ -24,4 +28,7 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+// Delete cached model to ensure schema changes (e.g. new fields) are always applied
+delete mongoose.models.User;
+
+export default mongoose.model("User", UserSchema);

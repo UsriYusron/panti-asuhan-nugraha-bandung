@@ -67,7 +67,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 className="absolute left-0 top-[68px] bottom-0 w-64 bg-[#0D0D0D] p-6 overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
-                <AdminSidebar role={currentUser?.role} onLogout={handleLogout} />
+                <AdminSidebar role={currentUser?.role} onLogout={handleLogout} onNavigate={() => setMobileOpen(false)} />
               </div>
               <div className="absolute inset-0 bg-black/60 -z-10" />
             </div>
