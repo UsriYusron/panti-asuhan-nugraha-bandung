@@ -159,6 +159,7 @@ export default function SorotanPage() {
 
                 <div className="flex justify-end mt-4">
                   <Button type="submit">Simpan</Button>
+                  {/* buat agar bisa di push ajaa */}
                 </div>
               </form>
             </DialogContent>
