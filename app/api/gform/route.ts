@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
+import connectDB from '@/lib/db';
+import FormResponseStatus from '@/models/FormResponseStatus';
+import { getSession } from '@/lib/auth';
 
 export async function GET() {
   try {
@@ -22,11 +25,6 @@ export async function GET() {
 
     const sheets = google.sheets({ version: 'v4', auth });
     
-    // Get the values from the first sheet
-    // We can use 'Sheet1' or just generic range 'A1:Z1000' if we don't know the sheet name.
-    // However, A:Z is safer to just get everything from the first visible sheet.
-    // Or we can fetch sheet metadata first, but typically 'Form Responses 1' or 'Form Responses 1!A:Z' is used.
-    // To make it dynamic and error-proof, we fetch metadata to get the first sheet's name.
     const metaData = await sheets.spreadsheets.get({ spreadsheetId: sheetId });
     const firstSheetName = metaData.data.sheets?.[0]?.properties?.title;
 
@@ -46,7 +44,7 @@ export async function GET() {
     }
 
     const headers = rows[0];
-    const data = rows.slice(1).map((row, index) => {
+    const rawData = rows.slice(1).map((row, index) => {
       const rowData: any = { _id: index.toString() };
       headers.forEach((header, i) => {
         rowData[header] = row[i] || "";
@@ -54,12 +52,56 @@ export async function GET() {
       return rowData;
     });
 
-    // Sort descending by Timestamp if it exists (usually the first column)
+    // Ambil data respon yang sudah diproses dari MongoDB
+    let processedKeysSet = new Set<string>();
+    try {
+      await connectDB();
+      const processedDocs = await FormResponseStatus.find({}, "responseKey");
+      processedKeysSet = new Set(processedDocs.map(d => d.responseKey));
+    } catch (dbError) {
+      console.error("GForm DB status fetch error:", dbError);
+    }
+
+    // Filter hanya data yang BELUM diproses
+    const data = rawData.filter((item) => {
+      const timestamp = item["Timestamp"] || "";
+      const nama = item["Nama Anak"] || item["Nama Lengkap"] || item["Nama"] || "";
+      const key = `${timestamp}_${nama}`;
+      return !processedKeysSet.has(key) && !processedKeysSet.has(item._id);
+    });
+
+    // Sort descending by Timestamp (terbaru di atas)
     data.reverse();
 
     return NextResponse.json({ headers, data });
   } catch (error: any) {
     console.error("GForm API Error:", error);
     return NextResponse.json({ error: error.message || 'Terjadi kesalahan saat mengambil data.' }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const session = await getSession();
+    if (!session || (session.role !== "Admin" && session.role !== "Pengurus")) {
+      return NextResponse.json({ message: "Akses ditolak" }, { status: 403 });
+    }
+
+    await connectDB();
+    const { responseKey, status, alasan } = await req.json();
+
+    if (!responseKey || !status) {
+      return NextResponse.json({ message: "Data tidak lengkap" }, { status: 400 });
+    }
+
+    const result = await FormResponseStatus.findOneAndUpdate(
+      { responseKey },
+      { responseKey, status, alasan, processedAt: new Date() },
+      { upsert: true, new: true }
+    );
+
+    return NextResponse.json(result, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ message: "Terjadi kesalahan", error: error.message }, { status: 500 });
   }
 }

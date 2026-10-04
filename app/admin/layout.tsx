@@ -55,7 +55,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <AdminHeader user={currentUser} onLogout={handleLogout} onMenuClick={() => setMobileOpen(!mobileOpen)} theme={theme} onToggleTheme={toggleTheme} />
 
       {/* Main scrollable area */}
-      <div className="h-full overflow-y-auto no-scrollbar">
+      <div className="h-full overflow-y-auto">
         <main className="flex flex-col md:flex-row gap-6 p-4 md:p-6 pt-20 md:pt-24 min-h-full">
           {/* Desktop Sidebar */}
           <AdminSidebar className="sticky top-24 h-[calc(100vh-8rem)] md:w-48 lg:w-60 bg-[#0D0D0D] rounded-2xl hidden md:flex p-8 overflow-y-auto" role={currentUser?.role} onLogout={handleLogout} />

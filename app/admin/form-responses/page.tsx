@@ -20,7 +20,7 @@ export default function FormResponsesPage() {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [isAcceptOpen, setIsAcceptOpen] = useState(false);
   const [isRejectOpen, setIsRejectOpen] = useState(false);
-  
+
   const [formData, setFormData] = useState({
     namaLengkap: "",
     tempatLahir: "",
@@ -31,7 +31,7 @@ export default function FormResponsesPage() {
     namaWali: "",
     kontakWali: ""
   });
-  
+
   const [rejectReason, setRejectReason] = useState("");
   const [rejectPhone, setRejectPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,7 +42,7 @@ export default function FormResponsesPage() {
     try {
       const res = await fetch("/api/gform");
       const result = await res.json();
-      
+
       if (res.ok) {
         setHeaders(result.headers || []);
         setData(result.data || []);
@@ -65,40 +65,65 @@ export default function FormResponsesPage() {
     currentPage, setCurrentPage, totalPages, paginatedData
   } = useDataTable(data, headers, 10);
 
-  // Fungsi util untuk menebak field
+  // Format nomor HP agar selalu berawalan +62
+  const formatPhoneWithPlus62 = (raw: string) => {
+    if (!raw) return "";
+    let cleaned = String(raw).trim().replace(/[\s\-\.]/g, "");
+    if (cleaned.startsWith("+62")) return cleaned;
+    if (cleaned.startsWith("62")) return "+" + cleaned;
+    if (cleaned.startsWith("0")) return "+62" + cleaned.slice(1);
+    if (/^\d+$/.test(cleaned)) return "+62" + cleaned;
+    return cleaned;
+  };
+
+  // Fungsi util untuk menebak field dengan prioritas persis lalu pencarian kata kunci
   const guessField = (item: any, keywords: string[]) => {
     if (!item) return "";
     for (const key of Object.keys(item)) {
-      if (keywords.some(k => key.toLowerCase().includes(k))) {
+      const lowerKey = key.toLowerCase().trim();
+      if (keywords.some(k => lowerKey === k.toLowerCase().trim())) {
+        return item[key];
+      }
+    }
+    for (const key of Object.keys(item)) {
+      const lowerKey = key.toLowerCase().trim();
+      if (keywords.some(k => lowerKey.includes(k.toLowerCase().trim()))) {
         return item[key];
       }
     }
     return "";
   };
 
+  const getResponseKey = (item: any) => {
+    if (!item) return "";
+    const timestamp = item["Timestamp"] || "";
+    const nama = item["Nama Anak"] || item["Nama Lengkap"] || guessField(item, ["nama anak", "nama lengkap", "nama"]) || "";
+    return `${timestamp}_${nama}`;
+  };
+
   const handleOpenAccept = (item: any) => {
     setSelectedItem(item);
-    
-    // Auto fill jika bisa tebak
+
+    const rawWa = guessField(item, ["nomor wa wali", "wa wali", "nomor wa", "whatsapp", "telepon", "hp", "nomor"]);
+
     setFormData({
-      namaLengkap: guessField(item, ["nama lengkap", "nama anak", "nama"]),
-      tempatLahir: guessField(item, ["tempat lahir"]),
-      tanggalLahir: guessField(item, ["tanggal lahir"]) || new Date().toISOString().split('T')[0],
+      namaLengkap: guessField(item, ["nama anak", "nama lengkap", "nama"]),
+      tempatLahir: guessField(item, ["usia", "umur", "tempat lahir"]),
+      tanggalLahir: guessField(item, ["tanggal lahir", "tgl lahir"]) || new Date().toISOString().split('T')[0],
       jenisKelamin: guessField(item, ["jenis kelamin", "kelamin"]).toLowerCase().includes("perempuan") ? "Perempuan" : "Laki-laki",
-      pendidikan: guessField(item, ["pendidikan", "sekolah", "kelas"]),
-      alamatAsal: guessField(item, ["alamat", "domisili"]),
+      pendidikan: guessField(item, ["kelas dan jenjang terakhir", "jenjang", "pendidikan", "sekolah", "kelas"]),
+      alamatAsal: guessField(item, ["alamat wali", "alamat", "domisili"]),
       namaWali: guessField(item, ["nama wali", "orang tua", "bapak", "ibu", "wali"]),
-      kontakWali: guessField(item, ["wa", "whatsapp", "telepon", "hp", "nomor"])
+      kontakWali: formatPhoneWithPlus62(rawWa)
     });
-    
+
     setIsAcceptOpen(true);
   };
 
   const handleOpenReject = (item: any) => {
     setSelectedItem(item);
-    let phone = guessField(item, ["wa", "whatsapp", "telepon", "hp", "nomor"]);
-    if (phone.startsWith("0")) phone = "62" + phone.slice(1);
-    setRejectPhone(phone);
+    let phone = guessField(item, ["nomor wa wali", "wa wali", "nomor wa", "whatsapp", "telepon", "hp", "nomor"]);
+    setRejectPhone(formatPhoneWithPlus62(phone));
     setRejectReason("");
     setIsRejectOpen(true);
   };
@@ -111,10 +136,19 @@ export default function FormResponsesPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       });
-      
+
       if (res.ok) {
+        // Tandai respon sebagai diproses (Terima)
+        const key = getResponseKey(selectedItem);
+        await fetch("/api/gform", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ responseKey: key, status: "Terima" })
+        });
+
         alert("Data anak berhasil ditambahkan!");
         setIsAcceptOpen(false);
+        fetchData();
       } else {
         const errData = await res.json();
         alert("Gagal: " + (errData.message || errData.error || "Terjadi kesalahan"));
@@ -126,15 +160,30 @@ export default function FormResponsesPage() {
     }
   };
 
-  const handleRejectSubmit = () => {
+  const handleRejectSubmit = async () => {
     if (!rejectPhone) {
       alert("Nomor WhatsApp tidak ditemukan.");
       return;
     }
-    const templateMsg = `Mohon maaf, pengajuan pendaftaran panti asuhan atas nama ${guessField(selectedItem, ["nama lengkap", "nama anak", "nama"])} tidak dapat kami terima.\n\nAlasan: ${rejectReason}\n\nTerima kasih atas pengertiannya.`;
-    const waUrl = `https://wa.me/${rejectPhone}?text=${encodeURIComponent(templateMsg)}`;
+
+    // Tandai respon sebagai diproses (Tolak)
+    const key = getResponseKey(selectedItem);
+    try {
+      await fetch("/api/gform", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ responseKey: key, status: "Tolak", alasan: rejectReason })
+      });
+    } catch (e) {
+      console.error("Gagal menyimpan status penolakan", e);
+    }
+
+    const cleanPhone = rejectPhone.replace(/\+/g, "");
+    const templateMsg = `Mohon maaf, pengajuan pendaftaran panti asuhan atas nama ${guessField(selectedItem, ["nama anak", "nama lengkap", "nama"])} tidak dapat kami terima.\n\nAlasan: ${rejectReason}\n\nTerima kasih atas pengertiannya.`;
+    const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(templateMsg)}`;
     window.open(waUrl, '_blank');
     setIsRejectOpen(false);
+    fetchData();
   };
 
   return (
@@ -177,7 +226,7 @@ export default function FormResponsesPage() {
                     </span>
                   )}
                 </div>
-                
+
                 <div className="flex flex-col gap-5 flex-grow mb-6">
                   {headers.map((header) => {
                     if (header === "Timestamp") return null;
@@ -195,14 +244,14 @@ export default function FormResponsesPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 mt-auto pt-4 border-t border-[#1F1F1F]">
-                  <Button onClick={() => handleOpenAccept(item)} className="w-full bg-green-600 hover:bg-green-700 text-white">
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Terima
+                <div className="flex flex-col sm:flex-row gap-2 mt-auto pt-4 border-t border-[#1F1F1F]">
+                  <Button onClick={() => handleOpenAccept(item)} className="flex-1 min-w-0 bg-green-600 hover:bg-green-700 text-white">
+                    <CheckCircle className="w-4 h-4 mr-2 shrink-0" />
+                    <span className="truncate">Terima</span>
                   </Button>
-                  <Button onClick={() => handleOpenReject(item)} variant="destructive" className="w-full">
-                    <XCircle className="w-4 h-4 mr-2" />
-                    Tolak
+                  <Button onClick={() => handleOpenReject(item)} variant="destructive" className="flex-1 min-w-0">
+                    <XCircle className="w-4 h-4 mr-2 shrink-0" />
+                    <span className="truncate">Tolak</span>
                   </Button>
                 </div>
 
@@ -213,7 +262,7 @@ export default function FormResponsesPage() {
       )}
 
       {!loading && !error && data.length > 0 && (
-        <TablePagination 
+        <TablePagination
           currentPage={currentPage}
           totalPages={totalPages}
           setCurrentPage={setCurrentPage}
@@ -228,20 +277,20 @@ export default function FormResponsesPage() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">Nama Lengkap</Label>
-              <Input className="col-span-3" value={formData.namaLengkap} onChange={e => setFormData({...formData, namaLengkap: e.target.value})} />
+              <Label className="text-right">Nama Anak</Label>
+              <Input className="col-span-3" value={formData.namaLengkap} onChange={e => setFormData({ ...formData, namaLengkap: e.target.value })} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label className="text-right">Tempat Lahir</Label>
-              <Input className="col-span-3" value={formData.tempatLahir} onChange={e => setFormData({...formData, tempatLahir: e.target.value})} />
+              <Label className="text-right">Usia Anak</Label>
+              <Input className="col-span-3" placeholder="Misal: 12 Tahun" value={formData.tempatLahir} onChange={e => setFormData({ ...formData, tempatLahir: e.target.value })} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">Tanggal Lahir</Label>
-              <Input type="date" className="col-span-3" value={formData.tanggalLahir} onChange={e => setFormData({...formData, tanggalLahir: e.target.value})} />
+              <Input type="date" className="col-span-3" value={formData.tanggalLahir} onChange={e => setFormData({ ...formData, tanggalLahir: e.target.value })} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">Jenis Kelamin</Label>
-              <Select value={formData.jenisKelamin} onValueChange={val => setFormData({...formData, jenisKelamin: val})}>
+              <Select value={formData.jenisKelamin} onValueChange={val => setFormData({ ...formData, jenisKelamin: val })}>
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Pilih jenis kelamin" />
                 </SelectTrigger>
@@ -253,19 +302,19 @@ export default function FormResponsesPage() {
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">Pendidikan</Label>
-              <Input className="col-span-3" value={formData.pendidikan} onChange={e => setFormData({...formData, pendidikan: e.target.value})} />
+              <Input className="col-span-3" value={formData.pendidikan} onChange={e => setFormData({ ...formData, pendidikan: e.target.value })} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">Alamat Asal</Label>
-              <Input className="col-span-3" value={formData.alamatAsal} onChange={e => setFormData({...formData, alamatAsal: e.target.value})} />
+              <Input className="col-span-3" value={formData.alamatAsal} onChange={e => setFormData({ ...formData, alamatAsal: e.target.value })} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">Nama Wali</Label>
-              <Input className="col-span-3" value={formData.namaWali} onChange={e => setFormData({...formData, namaWali: e.target.value})} />
+              <Input className="col-span-3" value={formData.namaWali} onChange={e => setFormData({ ...formData, namaWali: e.target.value })} />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label className="text-right">No WA Wali</Label>
-              <Input className="col-span-3" value={formData.kontakWali} onChange={e => setFormData({...formData, kontakWali: e.target.value})} />
+              <Input className="col-span-3" placeholder="+628123456789" value={formData.kontakWali} onChange={e => setFormData({ ...formData, kontakWali: e.target.value })} />
             </div>
           </div>
           <DialogFooter>
@@ -290,11 +339,11 @@ export default function FormResponsesPage() {
             </div>
             <div className="grid gap-2">
               <Label>Alasan Penolakan</Label>
-              <Textarea 
-                placeholder="Masukkan alasan penolakan..." 
-                value={rejectReason} 
-                onChange={e => setRejectReason(e.target.value)} 
-                rows={4} 
+              <Textarea
+                placeholder="Masukkan alasan penolakan..."
+                value={rejectReason}
+                onChange={e => setRejectReason(e.target.value)}
+                rows={4}
               />
             </div>
           </div>
