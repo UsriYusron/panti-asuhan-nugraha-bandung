@@ -16,9 +16,10 @@ export default function SorotanPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
-    judul: "", tagline: "", deskripsi: "", gambar: "", 
-    bgColor: "", 
-    accentColor: ""
+    judul: "", tagline: "", deskripsi: "", gambar: "",
+    bgColor: "",
+    accentColor: "",
+    linkInstagram: ""
   });
 
   const {
@@ -36,7 +37,7 @@ export default function SorotanPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let formDataToSubmit = { ...formData };
-    
+
     if (imageFile) {
       const uploadData = new FormData();
       uploadData.append("file", imageFile);
@@ -64,10 +65,11 @@ export default function SorotanPage() {
       setIsOpen(false);
       setEditingId(null);
       setImageFile(null);
-      setFormData({ 
-        judul: "", tagline: "", deskripsi: "", gambar: "", 
-        bgColor: "", 
-        accentColor: "" 
+      setFormData({
+        judul: "", tagline: "", deskripsi: "", gambar: "",
+        bgColor: "",
+        accentColor: "",
+        linkInstagram: ""
       });
       fetchData();
     }
@@ -77,12 +79,13 @@ export default function SorotanPage() {
     setEditingId(item._id);
     setImageFile(null);
     setFormData({
-      judul: item.judul || "", 
-      tagline: item.tagline || "", 
-      deskripsi: item.deskripsi || "", 
+      judul: item.judul || "",
+      tagline: item.tagline || "",
+      deskripsi: item.deskripsi || "",
       gambar: item.gambar || "",
       bgColor: item.bgColor || "",
-      accentColor: item.accentColor || ""
+      accentColor: item.accentColor || "",
+      linkInstagram: item.linkInstagram || ""
     });
     setIsOpen(true);
   };
@@ -108,10 +111,11 @@ export default function SorotanPage() {
             if (!open) {
               setEditingId(null);
               setImageFile(null);
-              setFormData({ 
-                judul: "", tagline: "", deskripsi: "", gambar: "", 
-                bgColor: "", 
-                accentColor: "" 
+              setFormData({
+                judul: "", tagline: "", deskripsi: "", gambar: "",
+                bgColor: "",
+                accentColor: "",
+                linkInstagram: ""
               });
             }
           }}>
@@ -119,41 +123,46 @@ export default function SorotanPage() {
               <Button onClick={() => {
                 setEditingId(null);
                 setImageFile(null);
-                setFormData({ 
-                  judul: "", tagline: "", deskripsi: "", gambar: "", 
-                  bgColor: "", 
-                  accentColor: "" 
+                setFormData({
+                  judul: "", tagline: "", deskripsi: "", gambar: "",
+                  bgColor: "",
+                  accentColor: "",
+                  linkInstagram: ""
                 });
               }}><Plus className="mr-2 h-4 w-4" /> Tambah Sorotan</Button>
             </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>{editingId ? "Edit Sorotan" : "Tambah Sorotan"}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label>Judul Sorotan</Label>
-                <Input required value={formData.judul} onChange={e => setFormData({...formData, judul: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Tagline (Kategori)</Label>
-                <Input required value={formData.tagline} onChange={e => setFormData({...formData, tagline: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Deskripsi</Label>
-                <Textarea required className="min-h-[100px]" value={formData.deskripsi} onChange={e => setFormData({...formData, deskripsi: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <Label>Gambar (Background)</Label>
-                <Input type="file" accept="image/png, image/jpeg" onChange={e => setImageFile(e.target.files?.[0] || null)} />
-              </div>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>{editingId ? "Edit Sorotan" : "Tambah Sorotan"}</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Judul Sorotan</Label>
+                  <Input required value={formData.judul} onChange={e => setFormData({ ...formData, judul: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Kategori (ex: Prestasi, Info Panti, dll)</Label>
+                  <Input required value={formData.tagline} onChange={e => setFormData({ ...formData, tagline: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Deskripsi</Label>
+                  <Textarea required className="min-h-[100px]" value={formData.deskripsi} onChange={e => setFormData({ ...formData, deskripsi: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Link Postingan Instagram (Opsional)</Label>
+                  <Input type="url" placeholder="https://www.instagram.com/p/..." value={formData.linkInstagram} onChange={e => setFormData({ ...formData, linkInstagram: e.target.value })} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Gambar (Background)</Label>
+                  <Input type="file" accept="image/png, image/jpeg" onChange={e => setImageFile(e.target.files?.[0] || null)} />
+                </div>
 
-              <div className="flex justify-end mt-4">
-                <Button type="submit">Simpan</Button>
-              </div>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <div className="flex justify-end mt-4">
+                  <Button type="submit">Simpan</Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 

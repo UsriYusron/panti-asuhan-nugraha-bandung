@@ -8,6 +8,7 @@ const SorotanSchema = new mongoose.Schema(
     gambar: { type: String, required: true },
     bgColor: { type: String, default: "from-[#84cc16]/20 via-[#84cc16]/10 to-transparent" },
     accentColor: { type: String, default: "#84cc16" },
+    linkInstagram: { type: String, default: "" },
   },
   { timestamps: true }
 );

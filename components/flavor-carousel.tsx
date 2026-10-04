@@ -4,7 +4,6 @@ import type React from "react"
 
 import { motion, AnimatePresence, useSpring } from "framer-motion"
 import { useState } from "react"
-import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { useEffect } from "react"
@@ -58,6 +57,7 @@ export function FlavorCarousel() {
             image: d.gambar ? `/api/image/${d.gambar}` : "",
             bgColor: d.bgColor,
             accentColor: d.accentColor,
+            linkInstagram: d.linkInstagram || "https://www.instagram.com/psaa.nugraha/",
           }))
           setFlavors(mapped)
         }
@@ -109,43 +109,6 @@ export function FlavorCarousel() {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1] }}
-          className="text-center mb-10"
-        >
-          <motion.span
-            className="font-mono text-[#121212]/60 text-xs tracking-widest"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-          </motion.span>
-          <h2 className="text-3xl md:text-5xl font-black text-[#121212] tracking-tighter mt-2 overflow-hidden">
-            <motion.span
-              className="inline-block"
-              initial={{ y: 80 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-            >
-              Muhamad Usri Yusron{" "}
-            </motion.span>
-            <motion.span
-              className="inline-block"
-              style={{ color: currentFlavor.accentColor }}
-              initial={{ y: 80 }}
-              whileInView={{ y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1], delay: 0.1 }}
-            >
-              as Software Engineer
-            </motion.span>
-          </h2>
-        </motion.div>
 
 
         <motion.div
@@ -208,27 +171,26 @@ export function FlavorCarousel() {
                   )}
 
                   <div className="grid md:grid-cols-2 gap-6 items-center">
-                    <motion.div
-                      className="relative aspect-[3/4] flex items-center justify-center"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    >
-                      <Image
+                    <div className="relative w-full flex items-center justify-center overflow-hidden rounded-2xl">
+                      <motion.img
                         src={currentFlavor.image || "/placeholder.svg"}
                         alt={currentFlavor.name}
-                        fill
-                        className={`object-contain ${currentFlavor.mystery ? "blur-sm grayscale" : ""}`}
+                        className={`w-full h-auto max-h-[380px] md:max-h-[450px] object-contain rounded-2xl ${
+                          currentFlavor.mystery ? "blur-sm grayscale" : ""
+                        }`}
+                        whileHover={{ scale: 1.06 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
                       />
                       {currentFlavor.mystery && (
                         <motion.div
-                          className="absolute inset-0 flex items-center justify-center"
+                          className="absolute inset-0 flex items-center justify-center pointer-events-none"
                           animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
                           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                         >
                           <span className="text-7xl font-black text-[#121212]/20">?</span>
                         </motion.div>
                       )}
-                    </motion.div>
+                    </div>
 
                     <div className="space-y-4">
                       <div>
@@ -262,7 +224,7 @@ export function FlavorCarousel() {
 
                       {!currentFlavor.mystery && (
                         <motion.a
-                          href="https://www.instagram.com/psaa.nugraha/"
+                          href={currentFlavor.linkInstagram || "https://www.instagram.com/psaa.nugraha/"}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="px-6 py-3 rounded-full font-bold text-sm tracking-wide w-full md:w-auto relative overflow-hidden inline-flex items-center justify-center"

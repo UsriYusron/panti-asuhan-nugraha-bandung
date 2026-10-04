@@ -127,7 +127,10 @@ export function HeroSection() {
               custom={4}
               className="flex flex-wrap gap-3 pt-2"
             >
-              <motion.button
+              <motion.a
+                href="https://wa.me/6285133520456"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide flex items-center gap-2 group relative overflow-hidden cursor-pointer"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -150,7 +153,7 @@ export function HeroSection() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </motion.svg>
-              </motion.button>
+              </motion.a>
             </motion.div>
           </motion.div>
 

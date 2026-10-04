@@ -5,6 +5,7 @@ import { BentoGrid } from "@/components/bento-grid"
 import { ActivationsSection } from "@/components/activations-section"
 import { TechStackSection } from "@/components/tech-stack-section"
 import { Footer } from "@/components/footer"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <ActivationsSection />
       <TechStackSection />
       <Footer />
+      <ScrollToTop />
     </main>
   )
 }

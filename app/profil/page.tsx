@@ -54,7 +54,7 @@ export default function ProfilPage() {
             <h2 className="text-3xl font-bold border-b border-zinc-800 pb-2">Struktur Organisasi</h2>
             <div className="bg-zinc-900 border border-zinc-800 p-8 rounded-2xl">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
+
                 {/* Penanggung Jawab & Ketua */}
                 <div className="space-y-6 md:col-span-3">
                   <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-8 border-b border-zinc-800 pb-4">
@@ -126,11 +126,11 @@ export default function ProfilPage() {
             <div className="grid md:grid-cols-2 gap-8 text-zinc-300 text-lg">
               <div>
                 <h4 className="font-bold text-white mb-2">Alamat</h4>
-                <p>Jl. Contoh Alamat Panti No. 123,<br />Kota Bandung, Jawa Barat 40123</p>
+                <p>Jl. PLN Dalam No. 4-6, Ciseureuh, Kec. Regol,<br />Kota Bandung, Jawa Barat 40255</p>
               </div>
               <div>
                 <h4 className="font-bold text-white mb-2">Hubungi Kami</h4>
-                <p>Telepon: (022) 1234567<br />Email: psaanugraha@gmail.com</p>
+                <p>Telepon: (62) 85133520456<br />Email: psaanugraha@gmail.com</p>
               </div>
             </div>
           </section>

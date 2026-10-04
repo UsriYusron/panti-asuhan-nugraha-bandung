@@ -65,6 +65,17 @@ export function Navigation() {
     setMobileMenuOpen(false)
   }
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault()
+      if (lenis) {
+        lenis.scrollTo(0)
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+      }
+    }
+  }
+
   const navLinks = [
     { label: "Profil Panti", href: "/profil" },
     { label: "Galeri", href: "/galeri" },
@@ -83,7 +94,7 @@ export function Navigation() {
         }`}
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" onClick={handleLogoClick} className="flex items-center gap-2">
           <motion.span
             className="text-2xl font-black tracking-tighter"
             whileHover={{ scale: 1.05 }}
@@ -118,31 +129,7 @@ export function Navigation() {
           ))}
         </div>
 
-        <Link href="/login">
-          <motion.div
-            className="hidden md:block bg-[#AFFF00] text-[#121212] px-6 py-2.5 rounded-full font-bold text-sm tracking-wide relative overflow-hidden cursor-pointer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          >
-            <motion.div
-              className="absolute inset-0 bg-white/30"
-              animate={{
-                boxShadow: [
-                  "0 0 20px rgba(175,255,0,0.3)",
-                  "0 0 40px rgba(175,255,0,0.6)",
-                  "0 0 20px rgba(175,255,0,0.3)",
-                ],
-              }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full"
-              animate={{ x: ["-100%", "200%"] }}
-              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
-            />
-            <span className="relative z-10">Login</span>
-          </motion.div>
+        <Link href="">
         </Link>
 
         <motion.button
@@ -199,16 +186,6 @@ export function Navigation() {
                   {item.label}
                 </MotionLink>
               ))}
-              <Link href="/login" className="block w-full">
-                <motion.div
-                  className="w-full bg-[#AFFF00] text-[#121212] px-6 py-3 rounded-full font-bold text-sm tracking-wide mt-4 text-center cursor-pointer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  Login
-                </motion.div>
-              </Link>
             </div>
           </motion.div>
         )}
