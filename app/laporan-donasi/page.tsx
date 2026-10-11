@@ -86,18 +86,22 @@ export default function LaporanDonasiPage() {
   const paginated = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <main className="min-h-screen bg-[#121212] text-white">
+    <main className="min-h-screen bg-[#121212] text-white pt-16">
       <Navigation />
 
-      <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-        {/* Header */}
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-[#AFFF00]">
-          Laporan Donasi
-        </h1>
-        <p className="text-white/70 mb-10 text-lg max-w-3xl">
-          Tabel donasi publik – pencarian nama / kwitansi dan filter periode.
-        </p>
+      {/* Sticky Header Judul */}
+      <div className="sticky top-16 z-40 bg-[#121212]/95 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-[#AFFF00]">
+            Laporan Donasi
+          </h1>
+          <p className="text-white/70 text-sm md:text-base mt-1 max-w-3xl">
+            Tabel donasi publik – pencarian nama / kwitansi dan filter periode.
+          </p>
+        </div>
+      </div>
 
+      <div className="py-8 pb-20 px-6 max-w-7xl mx-auto">
         {/* Filter Bar */}
         <section className="p-4 sm:p-6 bg-[#0D0D0D] border border-[#1F1F1F] rounded-t-2xl">
           <form onSubmit={handleFilter} className="flex flex-col gap-3">

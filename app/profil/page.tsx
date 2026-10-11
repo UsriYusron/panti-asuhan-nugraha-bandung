@@ -4,12 +4,19 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export default function ProfilPage() {
   return (
-    <main className="min-h-screen bg-[#121212] text-white">
+    <main className="min-h-screen bg-[#121212] text-white pt-16">
       <Navigation />
-      <div className="pt-32 pb-20 px-6 max-w-5xl mx-auto">
-        <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-12 text-center text-[#AFFF00]">
-          Profil Panti Asuhan
-        </h1>
+
+      {/* Sticky Header Judul */}
+      <div className="sticky top-16 z-40 bg-[#121212]/95 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-5xl mx-auto px-6 py-4 text-center">
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-[#AFFF00]">
+            Profil Panti Asuhan
+          </h1>
+        </div>
+      </div>
+
+      <div className="py-8 pb-20 px-6 max-w-5xl mx-auto">
 
         <div className="space-y-16">
           <section className="space-y-6">

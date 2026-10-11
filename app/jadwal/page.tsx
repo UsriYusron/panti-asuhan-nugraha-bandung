@@ -41,16 +41,22 @@ export default function JadwalPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#121212] text-white">
+    <main className="min-h-screen bg-[#121212] text-white pt-16">
       <Navigation />
-      <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-[#AFFF00]">
-          Jadwal Kegiatan
-        </h1>
-        <p className="text-white/70 mb-10 text-lg max-w-3xl">
-          Agenda dan kegiatan yang akan dan sedang berlangsung di Panti Asuhan Nugraha.
-        </p>
 
+      {/* Sticky Header Judul */}
+      <div className="sticky top-16 z-40 bg-[#121212]/95 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-[#AFFF00]">
+            Jadwal Kegiatan
+          </h1>
+          <p className="text-white/70 text-sm md:text-base mt-1 max-w-3xl">
+            Agenda dan kegiatan yang akan dan sedang berlangsung di Panti Asuhan Nugraha.
+          </p>
+        </div>
+      </div>
+
+      <div className="py-8 pb-20 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {kegiatan.length === 0 ? (
             <p className="text-white/50 col-span-full">Belum ada kegiatan yang dijadwalkan.</p>

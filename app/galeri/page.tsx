@@ -27,15 +27,22 @@ export default function GaleriPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#121212] text-white">
+    <main className="min-h-screen bg-[#121212] text-white pt-16">
       <Navigation />
-      <div className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 text-[#AFFF00] text-center">
-          Galeri Kegiatan
-        </h1>
-        <p className="text-white/70 mb-12 text-lg text-center max-w-2xl mx-auto">
-          Momen-momen kebersamaan dan berbagai kegiatan edukatif, sosial, serta keagamaan di Panti Asuhan Nugraha.
-        </p>
+
+      {/* Sticky Header Judul */}
+      <div className="sticky top-16 z-40 bg-[#121212]/95 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-6 py-4 text-center">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-[#AFFF00]">
+            Galeri Kegiatan
+          </h1>
+          <p className="text-white/70 text-sm md:text-base mt-1 max-w-2xl mx-auto">
+            Momen-momen kebersamaan dan berbagai kegiatan edukatif, sosial, serta keagamaan di Panti Asuhan Nugraha.
+          </p>
+        </div>
+      </div>
+
+      <div className="py-8 pb-20 px-6 max-w-7xl mx-auto">
 
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
