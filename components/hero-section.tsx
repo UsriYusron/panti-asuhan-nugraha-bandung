@@ -169,7 +169,7 @@ export function HeroSection() {
                 {/* <div className="absolute inset-y-0 -right-10 w-1/3 bg-gradient-to-l from-white via-white/50 to-transparent z-20 pointer-events-none blur-xl" /> */}
 
                 <Image
-                  src="/images/muhamadusriyusron.png"
+                  src="/images/muhamadusritest.png"
                   alt="Panti Asuhan Nugraha Energy Drink - Lemon Lime Flavour"
                   width={1200}
                   height={1200}

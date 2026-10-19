@@ -163,7 +163,7 @@ export function Footer() {
             }
             transition={{ duration: 0.5 }}
           >
-            <a href="https://muhamad-usriyusron.site/" target="_blank" rel="noopener noreferrer" className="block w-full h-full">
+            <a href="#" target="_blank" rel="noopener noreferrer" className="block w-full h-full">
               made with MUY ♥
             </a>
           </motion.p>

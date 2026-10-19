@@ -18,8 +18,8 @@ const _jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Panti Asuhan Nugraha | Membina dan Membangun Kepribadian Anak Asuh Yang Berakhlakul Karimah dan Mandiri",
-  description: "Dikembangkan oleh Muhamad Usri Yusron https://muhamad-usriyusron.site/ untuk Panti Asuhan Nugraha.",
-  keywords: ["muhamad usri yusron", "usri yusron", "panti nugraha", "Panti Asuhan Nugraha", "psaa nugraha bandung"],
+  description: "Dikembangkan oleh untuk Panti Asuhan Nugraha.",
+  keywords: ["panti nugraha", "Panti Asuhan Nugraha", "psaa nugraha bandung"],
   generator: 'v0.app'
 }
 

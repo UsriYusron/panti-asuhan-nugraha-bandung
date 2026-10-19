@@ -553,8 +553,8 @@ class App {
   ) {
     const defaultItems = [
       { image: `/images/usri.jpg`, text: 'Usri' },
-      { image: `/images/yusron.jpg`, text: 'Yusron' },
-      { image: `/images/usriyusron.jpg`, text: 'Usri Yusron' },
+      { image: `/images/test.jpg`, text: 'test' },
+      { image: `/images/usritest.jpg`, text: 'Usri test' },
       { image: `/images/psaa.jpg`, text: 'PSAA' },
       { image: `/images/bukber.jpg`, text: 'Bukber' },
       { image: `/images/rame.jpg`, text: 'Rame' },

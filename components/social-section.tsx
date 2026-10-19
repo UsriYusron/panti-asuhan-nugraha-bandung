@@ -22,8 +22,8 @@ import {
 
 const instagramPosts = [
   { image: "/images/usri.jpg", likes: "2.4k" },
-  { image: "/images/yusron.jpg", likes: "1.8k" },
-  { image: "/images/usriyusron.jpg", likes: "3.2k" },
+  { image: "/images/test.jpg", likes: "1.8k" },
+  { image: "/images/usritest.jpg", likes: "3.2k" },
   { image: "/images/psaa.jpg", likes: "956" },
   { image: "/images/bukber.jpg", likes: "1.5k" },
   { image: "/images/rame.jpg", likes: "2.1k" },
@@ -142,7 +142,7 @@ export function SocialSection() {
             scaleOnHover
             fadeOut
             fadeOutColor="#121212"
-            ariaLabel="Tech stack used by Muhamad Usri Yusron"
+            ariaLabel="Tech stack used by Panti Asuhan Nugraha"
             className="text-white/60 [&_a:hover]:text-[#AFFF00] [&_a]:transition-colors [&_a]:duration-300"
           />
         </motion.div>
