@@ -169,8 +169,8 @@ export function HeroSection() {
                 {/* <div className="absolute inset-y-0 -right-10 w-1/3 bg-gradient-to-l from-white via-white/50 to-transparent z-20 pointer-events-none blur-xl" /> */}
 
                 <Image
-                  src="/images/muhamadusritest.png"
-                  alt="Panti Asuhan Nugraha Energy Drink - Lemon Lime Flavour"
+                  src="/images/pantihero.png"
+                  alt="Panti Asuhan Nugraha"
                   width={1200}
                   height={1200}
                   className="relative z-10 drop-shadow-2xl"

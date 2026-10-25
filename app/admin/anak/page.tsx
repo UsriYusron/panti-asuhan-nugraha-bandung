@@ -35,9 +35,12 @@ export default function AnakPage() {
 
   useEffect(() => {
     fetchData();
-    fetch("/api/auth/me").then(res => res.json()).then(data => {
-      if (data.user) setCurrentUser(data.user);
-    });
+    fetch("/api/auth/me")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.user) setCurrentUser(data.user);
+      })
+      .catch(console.error);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

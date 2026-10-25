@@ -136,9 +136,9 @@ export default function LaporanDonasiPage() {
   useEffect(() => {
     fetchData();
     fetch("/api/auth/me")
-      .then((res) => res.json())
+      .then((res) => (res.ok ? res.json() : null))
       .then((resData) => {
-        if (resData.user) setCurrentUser(resData.user);
+        if (resData?.user) setCurrentUser(resData.user);
       })
       .catch((e) => console.error(e));
   }, []);
@@ -185,8 +185,8 @@ export default function LaporanDonasiPage() {
         body,
       });
 
-      const resJson = await res.json();
       if (res.ok) {
+        const resJson = await res.json();
         setImportResult({
           success: true,
           message: resJson.message || "Import berhasil!",
@@ -198,10 +198,11 @@ export default function LaporanDonasiPage() {
         if (fileInputRef.current) fileInputRef.current.value = "";
         fetchData();
       } else {
+        const resJson = await res.json().catch(() => ({}));
         setImportResult({
           success: false,
-          message: resJson.message || "Gagal mengimpor file",
-          warnings: resJson.errors,
+          message: resJson?.message || "Gagal mengimpor file",
+          warnings: resJson?.errors,
         });
       }
     } catch (err: any) {
@@ -273,8 +274,8 @@ export default function LaporanDonasiPage() {
         setIsFormOpen(false);
         fetchData();
       } else {
-        const errorData = await res.json();
-        alert(errorData.message || "Gagal menyimpan data donasi");
+        const errorData = await res.json().catch(() => ({}));
+        alert(errorData?.message || "Gagal menyimpan data donasi");
       }
     } catch (err) {
       alert("Terjadi kesalahan jaringan.");

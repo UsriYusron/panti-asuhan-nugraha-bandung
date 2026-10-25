@@ -18,9 +18,8 @@ const _jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Panti Asuhan Nugraha | Membina dan Membangun Kepribadian Anak Asuh Yang Berakhlakul Karimah dan Mandiri",
-  description: "Dikembangkan oleh untuk Panti Asuhan Nugraha.",
-  keywords: ["panti nugraha", "Panti Asuhan Nugraha", "psaa nugraha bandung"],
-  generator: 'v0.app'
+  description: "Dikembangkan untuk Panti Asuhan Nugraha.",
+  keywords: ["panti nugraha", "Panti Asuhan Nugraha", "psaa nugraha bandung", "panti asuhan bandung"],
 }
 
 export const viewport: Viewport = {

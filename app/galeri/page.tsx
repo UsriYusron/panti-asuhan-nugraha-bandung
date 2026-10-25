@@ -13,6 +13,7 @@ export default function GaleriPage() {
     async function fetchGaleri() {
       try {
         const res = await fetch("/api/galeri");
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         if (Array.isArray(data)) {
           setImages(data);
@@ -32,11 +33,11 @@ export default function GaleriPage() {
 
       {/* Sticky Header Judul */}
       <div className="sticky top-16 z-40 bg-[#121212]/95 backdrop-blur-md border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 text-center">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <h1 className="text-3xl md:text-4xl font-black tracking-tighter text-[#AFFF00]">
             Galeri Kegiatan
           </h1>
-          <p className="text-white/70 text-sm md:text-base mt-1 max-w-2xl mx-auto">
+          <p className="text-white/70 text-sm md:text-base mt-1 max-w-2xl">
             Momen-momen kebersamaan dan berbagai kegiatan edukatif, sosial, serta keagamaan di Panti Asuhan Nugraha.
           </p>
         </div>
@@ -56,10 +57,10 @@ export default function GaleriPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
             {images.map((img) => (
               <div key={img._id} className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-zinc-900 border border-zinc-800">
-                <img 
-                  src={`/api/image/${img.gambar}`} 
-                  alt={img.judul} 
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110" 
+                <img
+                  src={`/api/image/${img.gambar}`}
+                  alt={img.judul}
+                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">

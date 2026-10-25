@@ -552,9 +552,6 @@ class App {
     font = 'bold 30px Figtree'
   ) {
     const defaultItems = [
-      { image: `/images/usri.jpg`, text: 'Usri' },
-      { image: `/images/test.jpg`, text: 'test' },
-      { image: `/images/usritest.jpg`, text: 'Usri test' },
       { image: `/images/psaa.jpg`, text: 'PSAA' },
       { image: `/images/bukber.jpg`, text: 'Bukber' },
       { image: `/images/rame.jpg`, text: 'Rame' },

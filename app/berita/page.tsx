@@ -11,8 +11,13 @@ export default function BeritaPage() {
 
   useEffect(() => {
     fetch("/api/berita")
-      .then(res => res.json())
-      .then(data => setBerita(data))
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) setBerita(data);
+      })
       .catch(console.error);
   }, []);
 

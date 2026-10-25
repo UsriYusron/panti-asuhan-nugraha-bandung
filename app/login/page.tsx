@@ -31,8 +31,8 @@ export default function LoginPage() {
         router.push("/admin");
       }
     } else {
-      const data = await res.json();
-      setError(data.message || "Gagal login");
+      const data = await res.json().catch(() => ({}));
+      setError(data?.message || "Gagal login. Silakan coba lagi.");
     }
   };
 

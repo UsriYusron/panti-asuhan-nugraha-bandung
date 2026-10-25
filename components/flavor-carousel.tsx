@@ -46,9 +46,18 @@ export function FlavorCarousel() {
 
   useEffect(() => {
     fetch("/api/sorotan")
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Response is not JSON");
+        }
+        return res.json();
+      })
       .then((data) => {
-        if (data && data.length > 0) {
+        if (Array.isArray(data) && data.length > 0) {
           const mapped = data.map((d: any) => ({
             id: d._id,
             name: d.judul,
@@ -62,7 +71,9 @@ export function FlavorCarousel() {
           setFlavors(mapped)
         }
       })
-      .catch(console.error)
+      .catch((err) => {
+        console.warn("Could not load sorotan:", err.message);
+      })
   }, [])
 
   const currentFlavor = flavors[currentIndex]
@@ -175,9 +186,8 @@ export function FlavorCarousel() {
                       <motion.img
                         src={currentFlavor.image || "/placeholder.svg"}
                         alt={currentFlavor.name}
-                        className={`w-full h-auto max-h-[380px] md:max-h-[450px] object-contain rounded-2xl ${
-                          currentFlavor.mystery ? "blur-sm grayscale" : ""
-                        }`}
+                        className={`w-full h-auto max-h-[380px] md:max-h-[450px] object-contain rounded-2xl ${currentFlavor.mystery ? "blur-sm grayscale" : ""
+                          }`}
                         whileHover={{ scale: 1.06 }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                       />

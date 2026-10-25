@@ -34,9 +34,11 @@ export default function AdminGaleri() {
   const fetchGaleri = async () => {
     try {
       const res = await fetch("/api/galeri");
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setGaleriList(data);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setGaleriList(data);
+        }
       }
     } catch (error) {
       console.error("Error fetching galeri:", error);

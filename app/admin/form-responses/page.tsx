@@ -41,13 +41,13 @@ export default function FormResponsesPage() {
     setError("");
     try {
       const res = await fetch("/api/gform");
-      const result = await res.json();
-
       if (res.ok) {
+        const result = await res.json();
         setHeaders(result.headers || []);
         setData(result.data || []);
       } else {
-        setError(result.error || "Gagal mengambil data");
+        const result = await res.json().catch(() => null);
+        setError(result?.error || "Gagal mengambil data");
       }
     } catch (err) {
       setError("Terjadi kesalahan jaringan.");
